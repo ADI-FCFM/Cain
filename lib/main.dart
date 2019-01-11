@@ -1,5 +1,6 @@
+import 'package:beacons_manage/Bluetooth.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_blue/flutter_blue.dart';
 void main() {
   runApp(MaterialApp(
     title: 'Navigation Basics',
@@ -21,7 +22,7 @@ class HubScreen extends StatelessWidget{
               child: Text("Bluetooth"),
             ),
             RaisedButton(
-              onPressed: (){},
+              onPressed: (){Navigator.push(context,MaterialPageRoute(builder: (context)=>ThirdScreen()));},
               child: Text("GPS"),
             ),
             RaisedButton(
@@ -53,12 +54,7 @@ class BluetoothBeaconState extends State<BluetoothBeacon>{
         title: Text("Beacon "),
       ),
       body: Center(
-        child: RaisedButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Text('Hacia el Hub'),
-        ),
+        child: new FlutterBlueApp(),
       ),
     );
   }
@@ -115,6 +111,7 @@ class ThirdScreen extends StatelessWidget{
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
+              new FlutterBlueApp(),
               RaisedButton(
                 onPressed: () {Navigator.push(context,MaterialPageRoute(builder: (context)=>FirstScreen()));},
                 child: Text('Short'),
