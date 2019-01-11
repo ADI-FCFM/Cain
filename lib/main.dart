@@ -18,7 +18,7 @@ class HubScreen extends StatelessWidget{
         child: Column(
           children: <Widget>[
             RaisedButton(
-              onPressed: (){Navigator.push(context,MaterialPageRoute(builder: (context)=>BluetoothBeacon()));},
+              onPressed: (){Navigator.push(context,MaterialPageRoute(builder: (context)=>FlutterBlueApp()));},
               child: Text("Bluetooth"),
             ),
             RaisedButton(
@@ -41,25 +41,6 @@ class HubScreen extends StatelessWidget{
 }
 
 
-class BluetoothBeacon extends StatefulWidget{
-  @override
-  BluetoothBeaconState createState()=> new BluetoothBeaconState();
-}
-//TODO conectar la funcionalidad de la libreria con la app
-class BluetoothBeaconState extends State<BluetoothBeacon>{
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Beacon "),
-      ),
-      body: Center(
-        child: new FlutterBlueApp(),
-      ),
-    );
-  }
-
-}
 
 class FirstScreen extends StatelessWidget {
   @override

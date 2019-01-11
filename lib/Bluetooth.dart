@@ -302,7 +302,10 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
     }
     return new MaterialApp(
       home: new Scaffold(
-
+        appBar: new AppBar(
+          title: const Text('Bluetooth'),
+          centerTitle: true,
+        ),
         floatingActionButton: _buildScanningButton(),
         body: new Stack(
           children: <Widget>[
