@@ -11,7 +11,7 @@ void main() {
   ));
 }
 
-//TODO agregar direcciones de las pantallas
+
 class HubScreen extends StatelessWidget{
   Widget build(BuildContext context){
     return Scaffold(
