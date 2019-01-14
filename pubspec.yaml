@@ -10,7 +10,8 @@ dependencies:
   cupertino_icons: ^0.1.0
   flutter_blue: ^0.4.2
   flutter_local_notifications: "^0.2.9"
-
+  barcode_scan: ^0.0.8
+  url_launcher: ^4.0.3
 dev_dependencies:
   flutter_test:
     sdk: flutter

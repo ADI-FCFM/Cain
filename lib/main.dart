@@ -1,6 +1,9 @@
 import 'package:beacons_manage/Bluetooth.dart';
+import 'package:beacons_manage/GPS.dart';
+import 'package:beacons_manage/QR.dart';
+import 'package:beacons_manage/Wifi.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_blue/flutter_blue.dart';
+
 void main() {
   runApp(MaterialApp(
     title: 'Navigation Basics',
@@ -18,19 +21,20 @@ class HubScreen extends StatelessWidget{
         child: Column(
           children: <Widget>[
             RaisedButton(
+              color: Colors.blue,
               onPressed: (){Navigator.push(context,MaterialPageRoute(builder: (context)=>FlutterBlueApp()));},
               child: Text("Bluetooth"),
             ),
             RaisedButton(
-              onPressed: (){Navigator.push(context,MaterialPageRoute(builder: (context)=>ThirdScreen()));},
+              onPressed: (){Navigator.push(context,MaterialPageRoute(builder: (context)=>gps()));},
               child: Text("GPS"),
             ),
             RaisedButton(
-              onPressed: (){},
+              onPressed: (){Navigator.push(context,MaterialPageRoute(builder: (context)=>wifi()));},
               child: Text("WIFI"),
             ),
             RaisedButton(
-              onPressed: (){},
+              onPressed: (){Navigator.push(context,MaterialPageRoute(builder: (context)=>qr()));},
               child: Text("QR"),
             ),
           ],

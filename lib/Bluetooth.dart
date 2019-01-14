@@ -6,8 +6,6 @@ import 'package:flutter_blue/flutter_blue.dart';
 
 //widget para el bluetooth
 class FlutterBlueApp extends StatefulWidget {
-
-
   @override
   _FlutterBlueAppState createState() => new _FlutterBlueAppState();
 }
@@ -26,6 +24,7 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
 
   /// Device
   BluetoothDevice device;
+
   bool get isConnected => (device != null);
   StreamSubscription deviceConnection;
   StreamSubscription deviceStateSubscription;
@@ -72,12 +71,12 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
         .listen((scanResult) {
       //print('localName: ${scanResult.advertisementData.localName}');
       //print(
-       //   'manufacturerData: ${scanResult.advertisementData.manufacturerData}');
+      //   'manufacturerData: ${scanResult.advertisementData.manufacturerData}');
       //print('serviceData: ${scanResult.advertisementData.serviceData}');
       setState(() {
-
-        if(scanResult.advertisementData.localName!=""){
-        scanResults[scanResult.device.id] = scanResult;}
+        if (scanResult.advertisementData.localName != "") {
+          scanResults[scanResult.device.id] = scanResult;
+        }
       });
     }, onDone: _stopScan);
 
@@ -100,9 +99,9 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
     deviceConnection = _flutterBlue
         .connect(device, timeout: const Duration(seconds: 4))
         .listen(
-      null,
-      onDone: _disconnect,
-    );
+          null,
+          onDone: _disconnect,
+        );
 
     // Update the connection state immediately
     device.state.then((s) {
@@ -207,9 +206,9 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
   _buildScanResultTiles() {
     return scanResults.values
         .map((r) => ScanResultTile(
-      result: r,
-      onTap: () => _connect(r.device),
-    ))
+              result: r,
+              onTap: () => _connect(r.device),
+            ))
         .toList();
   }
 
@@ -217,29 +216,29 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
     return services
         .map(
           (s) => new ServiceTile(
-        service: s,
-        characteristicTiles: s.characteristics
-            .map(
-              (c) => new CharacteristicTile(
-            characteristic: c,
-            onReadPressed: () => _readCharacteristic(c),
-            onWritePressed: () => _writeCharacteristic(c),
-            onNotificationPressed: () => _setNotification(c),
-            descriptorTiles: c.descriptors
-                .map(
-                  (d) => new DescriptorTile(
-                descriptor: d,
-                onReadPressed: () => _readDescriptor(d),
-                onWritePressed: () =>
-                    _writeDescriptor(d),
+                service: s,
+                characteristicTiles: s.characteristics
+                    .map(
+                      (c) => new CharacteristicTile(
+                            characteristic: c,
+                            onReadPressed: () => _readCharacteristic(c),
+                            onWritePressed: () => _writeCharacteristic(c),
+                            onNotificationPressed: () => _setNotification(c),
+                            descriptorTiles: c.descriptors
+                                .map(
+                                  (d) => new DescriptorTile(
+                                        descriptor: d,
+                                        onReadPressed: () => _readDescriptor(d),
+                                        onWritePressed: () =>
+                                            _writeDescriptor(d),
+                                      ),
+                                )
+                                .toList(),
+                          ),
+                    )
+                    .toList(),
               ),
-            )
-                .toList(),
-          ),
         )
-            .toList(),
-      ),
-    )
         .toList();
   }
 
