@@ -7,9 +7,9 @@ class wifi extends StatefulWidget{
 }
 
 class wifiApp extends State<wifi>{
-  String wifiName;
-  String ip;
-  String intensidad;
+  String wifiName='';
+  String ip='';
+  int intensidad=0;
   Future<Null> _getIP()async{
     String _ip= await Wifi.ip;
     setState(() {
@@ -23,22 +23,20 @@ class wifiApp extends State<wifi>{
     });
   }
   Future<Null> _getWifiLevel()async{
-  String _wifiLevel = await Wifi.level.toString();
+  int _wifiLevel = await Wifi.level;
   setState(() {
     intensidad = _wifiLevel;
   });
   }
 
-  getData(){
-    print(1);
-    child: new Column(
-      children: <Widget>[
-        new Text(wifiName),
-        new Text(ip),
-        new Text(intensidad),
+  getData()async{
+    _getWifiName();
+    _getWifiLevel();
+    _getIP();
+    print(wifiName);
+    print(ip);
+    print('$intensidad');
 
-      ],
-    );
   }
   @override
   Widget build(BuildContext context) {
@@ -53,6 +51,45 @@ class wifiApp extends State<wifi>{
               child: Text('get wifi info'),
               onPressed: getData,
             ),
+
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: Text(
+                      "Nombre Wifi",
+                    style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 0.5),),
+
+                ),
+                Expanded(
+                  child: Text("IP",style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 0.5),),
+                ),
+                Expanded(
+                  child: Text("Intensidad",style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 0.5),),
+                ),
+
+
+
+              ],
+            ),
+
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child:Text(wifiName),
+                ),
+                Expanded(
+                  child: Text(ip),
+                ),
+                Expanded(
+                  child: Text('$intensidad'),
+                ),
+
+
+
+              ],
+            ),
+
+
 
           ],
         ),
