@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:location/location.dart';
 
-import 'package:flutter/material.dart';
-
 class gps extends StatefulWidget{
   gpsApp createState()=> new gpsApp();
 }
@@ -89,7 +87,7 @@ class gpsApp extends State<gps>{
     widgets.add(new Center(
         child: new Text(_currentLocation != null
             ? 'Continuous location: $_currentLocation\n'
-            : 'Error: ME CAGO EN TODO \n')));
+            : 'Error: $error\n')));
 
     widgets.add(new Center(
         child: new Text(_permission

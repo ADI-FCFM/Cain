@@ -17,102 +17,39 @@ class HubScreen extends StatelessWidget{
     return Scaffold(
       appBar: AppBar(title: Text("Hub"),
       ),
-      body: Center (
-        child: Column(
-          children: <Widget>[
-            RaisedButton(
-              color: Colors.blue,
-              onPressed: (){Navigator.push(context,MaterialPageRoute(builder: (context)=>FlutterBlueApp()));},
-              child: Text("Bluetooth"),
-            ),
-            RaisedButton(
-              onPressed: (){Navigator.push(context,MaterialPageRoute(builder: (context)=>gps()));},
-              child: Text("GPS"),
-            ),
-            RaisedButton(
-              onPressed: (){Navigator.push(context,MaterialPageRoute(builder: (context)=>wifi()));},
-              child: Text("WIFI"),
-            ),
-            RaisedButton(
-              onPressed: (){Navigator.push(context,MaterialPageRoute(builder: (context)=>qr()));},
-              child: Text("QR"),
-            ),
-          ],
-        )
-      ),
-    );
-  }
-}
+      body:
+          new GridView.count(
+              padding: const EdgeInsets.all(15.0),
+              crossAxisCount: 2,
 
-
-
-class FirstScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('HUB'),
-      ),
-      body: Center(
-        child: RaisedButton(
-          child: Text('Launch screen'),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => SecondScreen()),
-            );
-          },
+      children: <Widget>[
+        RaisedButton(
+          color: Colors.blue,
+          onPressed: (){Navigator.push(context,MaterialPageRoute(builder: (context)=>FlutterBlueApp()));},
+          child: Text("Bluetooth"),
         ),
-      ),
-    );
-  }
-}
-
-class SecondScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Second Screen"),
-      ),
-      body: Center(
-        child: RaisedButton(
-          onPressed: () {
-            Navigator.push(context,MaterialPageRoute(builder: (context)=> ThirdScreen()));
-          },
-          child: Text('Go back!'),
+        RaisedButton(
+          color: Colors.redAccent,
+          onPressed: (){Navigator.push(context,MaterialPageRoute(builder: (context)=>gps()));},
+          child: Text("GPS"),
         ),
-      ),
-    );
-  }
-}
-class ThirdScreen extends StatelessWidget{
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('IntrinsicWidth')),
-      body: Center(
-        child: IntrinsicHeight(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              new FlutterBlueApp(),
-              RaisedButton(
-                onPressed: () {Navigator.push(context,MaterialPageRoute(builder: (context)=>FirstScreen()));},
-                child: Text('Short'),
-              ),
-              RaisedButton(
-                onPressed: () {Navigator.pop(context);},
-                child: Text('A bit Longer'),
-              ),
-              RaisedButton(
-                onPressed: () {Navigator.pop(context);},
-                child: Text('The Longest text button'),
-              ),
-            ],
+        RaisedButton(
+          color: Colors.lightGreen,
+          onPressed: (){Navigator.push(context,MaterialPageRoute(builder: (context)=>wifi()));},
+          child: Text("WIFI"),
+        ),
+        RaisedButton(
+          color: Colors.deepPurpleAccent,
+          onPressed: (){Navigator.push(context,MaterialPageRoute(builder: (context)=>qr()));},
+          child: Text("QR"),
+        ),
+      ],
           ),
-        ),
-      ),
     );
   }
 }
+
+
+
+
+

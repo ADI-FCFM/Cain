@@ -3,7 +3,7 @@
 ## Bluetooth
 Boton para iniciar escaneo de los dispositivos. De cada dispositivo muestra nombre, uuid, mac, rssi
 ## GPS
-Falta implementar y verificar la precision
+Entregar longitud, latitud, ademas de entregar la precision del calculo.
 ## QR
 Escanea imagen, entrega en pantalla la informacion obtenida del QR
 ## Wifi
