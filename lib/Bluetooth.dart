@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:beacons_manage/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+//TODO refactor y clarificacion del codigo.
 
 //widget para el bluetooth
 class FlutterBlueApp extends StatefulWidget {

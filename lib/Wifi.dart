@@ -10,19 +10,19 @@ class wifiApp extends State<wifi>{
   String wifiName='';
   String ip='';
   int intensidad=0;
-  Future<Null> _getIP()async{
+  Future<void> _getIP()async{
     String _ip= await Wifi.ip;
     setState(() {
       ip=_ip;
     });
   }
-  Future<Null> _getWifiName()async{
+  Future<void> _getWifiName()async{
     String _wifiName = await Wifi.ssid;
     setState(() {
       wifiName =_wifiName;
     });
   }
-  Future<Null> _getWifiLevel()async{
+  Future<void> _getWifiLevel()async{
   int _wifiLevel = await Wifi.level;
   setState(() {
     intensidad = _wifiLevel;
@@ -40,6 +40,7 @@ class wifiApp extends State<wifi>{
   }
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Wifi'),

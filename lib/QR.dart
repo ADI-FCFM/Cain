@@ -1,6 +1,4 @@
-import 'package:beacons_manage/Bluetooth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_blue/flutter_blue.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/services.dart';
@@ -31,7 +29,7 @@ class qrAppState extends State<qr>{
       }
     }
   }
-
+//metodos para el url_launcher en caso de necesitarlo
    _check(result){
      var aux = result.substring(0,4);
      if(aux=='http')
