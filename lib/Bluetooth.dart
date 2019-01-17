@@ -20,8 +20,8 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
   bool isScanning = false;
 
   /// State
-  StreamSubscription _stateSubscription;
-  BluetoothState state = BluetoothState.unknown;
+  StreamSubscription _stateSubscription; /// Detecta cambios de estado del Bluetooth
+  BluetoothState state = BluetoothState.unknown; /// Establece el estado en que se encuentra el bluetooth del dispositivo
 
   /// Device
   BluetoothDevice device;
@@ -33,16 +33,18 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
   Map<Guid, StreamSubscription> valueChangedSubscriptions = {};
   BluetoothDeviceState deviceState = BluetoothDeviceState.disconnected;
 
+
+  /// revisa el estado de el bluetooth.
   @override
   void initState() {
     super.initState();
-    // Immediately get the state of FlutterBlue
+    /// Immediately get the state of FlutterBlue
     _flutterBlue.state.then((s) {
       setState(() {
         state = s;
       });
     });
-    // Subscribe to state changes
+    /// Subscribe to state changes
     _stateSubscription = _flutterBlue.onStateChanged().listen((s) {
       setState(() {
         state = s;
@@ -50,6 +52,8 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
     });
   }
 
+
+  /// Maneja el estado del bluetooth cuando se desactiva
   @override
   void dispose() {
     _stateSubscription?.cancel();
@@ -65,15 +69,8 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
     _scanSubscription = _flutterBlue
         .scan(
       timeout: const Duration(seconds: 5),
-      /*withServices: [
-          new Guid('0000180F-0000-1000-8000-00805F9B34FB')
-        ]*/
     )
         .listen((scanResult) {
-      //print('localName: ${scanResult.advertisementData.localName}');
-      //print(
-      //   'manufacturerData: ${scanResult.advertisementData.manufacturerData}');
-      //print('serviceData: ${scanResult.advertisementData.serviceData}');
       setState(() {
         if (scanResult.advertisementData.localName != "") {
           scanResults[scanResult.device.id] = scanResult;
@@ -94,59 +91,10 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
     });
   }
 
-  _connect(BluetoothDevice d) async {
-    device = d;
-    // Connect to device
-    deviceConnection = _flutterBlue
-        .connect(device, timeout: const Duration(seconds: 4))
-        .listen(
-          null,
-          onDone: _disconnect,
-        );
 
-    // Update the connection state immediately
-    device.state.then((s) {
-      setState(() {
-        deviceState = s;
-      });
-    });
-
-    // Subscribe to connection changes
-    deviceStateSubscription = device.onStateChanged().listen((s) {
-      setState(() {
-        deviceState = s;
-      });
-      if (s == BluetoothDeviceState.connected) {
-        device.discoverServices().then((s) {
-          setState(() {
-            services = s;
-          });
-        });
-      }
-    });
-  }
-
-  _disconnect() {
-    // Remove all value changed listeners
-    valueChangedSubscriptions.forEach((uuid, sub) => sub.cancel());
-    valueChangedSubscriptions.clear();
-    deviceStateSubscription?.cancel();
-    deviceStateSubscription = null;
-    deviceConnection?.cancel();
-    deviceConnection = null;
-    setState(() {
-      device = null;
-    });
-  }
 
   _readCharacteristic(BluetoothCharacteristic c) async {
     await device.readCharacteristic(c);
-    setState(() {});
-  }
-
-  _writeCharacteristic(BluetoothCharacteristic c) async {
-    await device.writeCharacteristic(c, [0x12, 0x34],
-        type: CharacteristicWriteType.withResponse);
     setState(() {});
   }
 
@@ -155,30 +103,7 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
     setState(() {});
   }
 
-  _writeDescriptor(BluetoothDescriptor d) async {
-    await device.writeDescriptor(d, [0x12, 0x34]);
-    setState(() {});
-  }
 
-  _setNotification(BluetoothCharacteristic c) async {
-    if (c.isNotifying) {
-      await device.setNotifyValue(c, false);
-      // Cancel subscription
-      valueChangedSubscriptions[c.uuid]?.cancel();
-      valueChangedSubscriptions.remove(c.uuid);
-    } else {
-      await device.setNotifyValue(c, true);
-      // ignore: cancel_subscriptions
-      final sub = device.onValueChanged(c).listen((d) {
-        setState(() {
-          print('onValueChanged $d');
-        });
-      });
-      // Add to map
-      valueChangedSubscriptions[c.uuid] = sub;
-    }
-    setState(() {});
-  }
 
   _refreshDeviceState(BluetoothDevice d) async {
     var state = await d.state;
@@ -188,6 +113,7 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
     });
   }
 
+  /// Crea el boton para empezar y terminar el escaneo de dispositivos
   _buildScanningButton() {
     if (isConnected || state != BluetoothState.on) {
       return null;
@@ -196,7 +122,7 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
       return new FloatingActionButton(
         child: new Icon(Icons.stop),
         onPressed: _stopScan,
-        backgroundColor: Colors.red,
+        backgroundColor: Colors.green,
       );
     } else {
       return new FloatingActionButton(
@@ -208,7 +134,6 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
     return scanResults.values
         .map((r) => ScanResultTile(
               result: r,
-              onTap: () => _connect(r.device),
             ))
         .toList();
   }
@@ -223,15 +148,11 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
                       (c) => new CharacteristicTile(
                             characteristic: c,
                             onReadPressed: () => _readCharacteristic(c),
-                            onWritePressed: () => _writeCharacteristic(c),
-                            onNotificationPressed: () => _setNotification(c),
                             descriptorTiles: c.descriptors
                                 .map(
                                   (d) => new DescriptorTile(
                                         descriptor: d,
                                         onReadPressed: () => _readDescriptor(d),
-                                        onWritePressed: () =>
-                                            _writeDescriptor(d),
                                       ),
                                 )
                                 .toList(),
@@ -241,17 +162,6 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
               ),
         )
         .toList();
-  }
-
-  _buildActionButtons() {
-    if (isConnected) {
-      return <Widget>[
-        new IconButton(
-          icon: const Icon(Icons.cancel),
-          onPressed: () => _disconnect(),
-        )
-      ];
-    }
   }
 
   _buildAlertTile() {
@@ -284,6 +194,7 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
         ));
   }
 
+  /// Barrita arriba para demostrar que que el escaneo esta en proceso
   _buildProgressBarTile() {
     return new LinearProgressIndicator();
   }

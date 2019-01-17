@@ -1,26 +1,31 @@
 # Disclaimer:
 Todas las implementaciones estan basadas en los ejemplos de las librerias que estan siendo utilizadas
 , se han realizado pequeños cambios con el objetivo de mostrar de forma mas clara lo que se ha pedido.
-Se espera refactorizar los codigos de bluetooth y de GPS para hacerlo mas entendible.
+Se espera refactorizar el codigo de bluetooth
 
-
-# Cosas Hechas
 ## Bluetooth
 Boton para iniciar escaneo de los dispositivos.
  De cada dispositivo muestra nombre, uuid, mac, rssi
+
+### Observaciones
+Beacons **deben** tener un nombre.
 ## GPS
 Entregar longitud, latitud, ademas de entregar la precision del calculo.
 ### Observaciones
 se demora entre 5-10 segundos en actualizar la locacion segun testeos
 
 ### Permisos 
-En AndroidManifest.xml dentro de la capeta android => app => src => main 
-* <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-En Info.plist dentro de la carpeta ios => Runner
-*    <key>NSLocationAlwaysUsageDescription</key>
+En AndroidManifest.xml dentro de la capeta android/app/src/main 
+```xml
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+```
+En Info.plist dentro de la carpeta ios/Runner
+
+     <key>NSLocationAlwaysUsageDescription</key>
      <string>Needed to access location</string>
      <key>NSLocationWhenInUseUsageDescription</key>
      <string>Needed to access location</string>
+
 ## QR
 * Altura de Santiago: 545m.
 Escanea imagen, entrega en pantalla la informacion obtenida del QR, metodos usados a continuacion
