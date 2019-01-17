@@ -10,6 +10,17 @@ Boton para iniciar escaneo de los dispositivos.
  De cada dispositivo muestra nombre, uuid, mac, rssi
 ## GPS
 Entregar longitud, latitud, ademas de entregar la precision del calculo.
+### Observaciones
+se demora entre 5-10 segundos en actualizar la locacion segun testeos
+
+### Permisos 
+En AndroidManifest.xml dentro de la capeta android => app => src => main 
+* <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+En Info.plist dentro de la carpeta ios => Runner
+*    <key>NSLocationAlwaysUsageDescription</key>
+     <string>Needed to access location</string>
+     <key>NSLocationWhenInUseUsageDescription</key>
+     <string>Needed to access location</string>
 ## QR
 * Altura de Santiago: 545m.
 Escanea imagen, entrega en pantalla la informacion obtenida del QR, metodos usados a continuacion
