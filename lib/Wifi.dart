@@ -7,21 +7,27 @@ class wifi extends StatefulWidget{
 }
 
 class wifiApp extends State<wifi>{
+  //Declaracion de variables para guardar la informacion
   String wifiName='';
   String ip='';
   int intensidad=0;
+
+  //Obtiene la direccion ip de la red a la que esta conectada
   Future<void> _getIP()async{
     String _ip= await Wifi.ip;
     setState(() {
       ip=_ip;
     });
   }
+  // Obtiene el nombre de la red a la que esta conectada
   Future<void> _getWifiName()async{
     String _wifiName = await Wifi.ssid;
     setState(() {
       wifiName =_wifiName;
     });
   }
+
+  // Obtiene intensidad del Wifi, valores detallados en el README
   Future<void> _getWifiLevel()async{
   int _wifiLevel = await Wifi.level;
   setState(() {
@@ -29,18 +35,16 @@ class wifiApp extends State<wifi>{
   });
   }
 
+  // Metodo para llamar a las funciones anteriores.
   getData()async{
     _getWifiName();
     _getWifiLevel();
     _getIP();
-    print(wifiName);
-    print(ip);
-    print('$intensidad');
-
   }
+
+  // Constructor de la Vista del WIFI
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Wifi'),
@@ -50,16 +54,13 @@ class wifiApp extends State<wifi>{
           children: <Widget>[
             RaisedButton(
               child: Text('get wifi info'),
-              onPressed: getData,
-            ),
-
-            Row(
+              onPressed: getData, // boton que actualiza la informacion
+            ), Row(
               children: <Widget>[
                 Expanded(
                   child: Text(
                       "Nombre Wifi",
                     style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 0.5),),
-
                 ),
                 Expanded(
                   child: Text("IP",style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 0.5),),
@@ -67,13 +68,8 @@ class wifiApp extends State<wifi>{
                 Expanded(
                   child: Text("Intensidad",style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 0.5),),
                 ),
-
-
-
               ],
-            ),
-
-            Row(
+            ), Row(
               children: <Widget>[
                 Expanded(
                   child:Text(wifiName),
@@ -84,14 +80,8 @@ class wifiApp extends State<wifi>{
                 Expanded(
                   child: Text('$intensidad'),
                 ),
-
-
-
               ],
             ),
-
-
-
           ],
         ),
       ),

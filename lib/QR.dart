@@ -9,10 +9,15 @@ class qr extends StatefulWidget{
 }
 
 class qrAppState extends State<qr>{
+  // String para guardar y mostrar la informacion del QR, empieza con
+  // un mensaje por defecto
   String result = "Apriete el icono para escanear !";
 
+  // Metodo que hace el Escaneo de la imagen, junto con el manejo de
+  // errores en caso que haya
   Future _scanQR() async {
     try {
+      //BarcodeScanner.scan es la funcion que realiza el Scan del QR.
       String qrResult = await BarcodeScanner.scan();
       setState(() {
         result = qrResult;
@@ -36,6 +41,7 @@ class qrAppState extends State<qr>{
        return true;
      return false;
    }
+  //metodos para el url_launcher en caso de necesitarlo
   _launch(result)async{
     if(await canLaunch(result)){
       await launch(result, forceSafariVC: true, forceWebView: true);
@@ -44,9 +50,10 @@ class qrAppState extends State<qr>{
       throw 'no funca';
     }
   }
+
+  // constructor de la vista.
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text("QR Scanner"),
@@ -58,6 +65,8 @@ class qrAppState extends State<qr>{
           style: new TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
         ),
       ),
+
+      //icono y boton para iniciar el escaneo.
       floatingActionButton: FloatingActionButton.extended(
         icon: Icon(Icons.camera_alt),
         label: Text("Empezar el escaneo"),

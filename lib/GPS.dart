@@ -9,14 +9,18 @@ class gps extends StatefulWidget{
 }
 
 class gpsApp extends State<gps>{
-  Map<String, double> _startLocation;
-  Map<String, double> _currentLocation;
+
+  int bla= 0;
+  Map<String, double> _startLocation; // mapa que guarda los datos de localizacion original
+  Map<String, double> _currentLocation; // mapa que guarda los datos de localizacion actual
   StreamSubscription<Map<String, double>> _locationSubscription;
-  Location _location = new Location();
+  Location _location = new Location(); // inicializa el objeto locacion para obtener la informacion
   bool _permission = false;
   String error;
   bool currentWidget = true;
 
+
+  // metodo para inicializar el registro de informacion.
   @override
   void initState() {
     super.initState();
@@ -31,25 +35,11 @@ class gpsApp extends State<gps>{
 
   // Platform messages are asynchronous, so we initialize in an async method.
   initPlatformState() async {
-    Map<String, double> location;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      _permission = await _location.hasPermission();
-      location = await _location.getLocation();
+    Map<String, double> location; // mapa auxiliar para guardar las locaciones dentro del metodo
+      _permission = await _location.hasPermission(); // checkea que la app tenga acceso al gps
+      location = await _location.getLocation(); // funcion para obtener la locacion
       error = null;
-    } on PlatformException catch (e) {
-      if (e.code == 'PERMISSION_DENIED') {
-        error = 'Permission denied';
-      } else if (e.code == 'PERMISSION_DENIED_NEVER_ASK') {
-        error = 'Permission denied - please ask the user to enable it from the app settings';
-      }
-      location = null;
-    }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    //if (!mounted) return;
+    // setState() sirve para notificar a la app que se genero un cambio.
     setState(() {
       _startLocation = location;
     });
@@ -57,29 +47,15 @@ class gpsApp extends State<gps>{
   }
   @override
   Widget build(BuildContext context) {
-    print(_currentLocation);
-    List<Widget> widgets;
-    if (_currentLocation == null) {
-      widgets = new List();
-    } else {
-      widgets = [
-        ];
-    }
+    var latitude = _currentLocation["latitude"];
+    var longitude = _currentLocation["longitude"];
+    var accuracy = _currentLocation["accuracy"];
+    var altitude = _currentLocation["altitude"];
 
-    widgets.add(new Center(
-        child: new Text(_startLocation != null
-            ? 'Start location: $_startLocation\n'
-            : 'Error: $error\n')));
-
-    widgets.add(new Center(
-        child: new Text(_currentLocation != null
-            ? 'Continuous location: $_currentLocation\n'
-            : 'Error: $error\n')));
-
-    widgets.add(new Center(
-        child: new Text(_permission
-            ? 'Has permission : Yes'
-            : "Has permission : No")));
+    var Olatitude = _startLocation["latitude"];
+    var Olongitude = _startLocation["longitude"];
+    var Oaccuracy = _startLocation["accuracy"];
+    var Oaltitude = _startLocation["altitude"];
 
     return new MaterialApp(
         home: new Scaffold(
@@ -89,7 +65,35 @@ class gpsApp extends State<gps>{
             body: new Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
-              children: widgets,
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Expanded(child: Text(""),),
+                    Expanded(child: Text("Latitud"),),
+                    Expanded(child: Text("Longitud"),),
+                    Expanded(child: Text("Altura"),),
+                    Expanded(child: Text("Precision"),),
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    Expanded(child: Text("Posicion Inicial"),),
+                    Expanded(child: Text('$Olatitude'),),
+                    Expanded(child: Text('$Olongitude'),),
+                    Expanded(child: Text('$Oaltitude'),),
+                    Expanded(child: Text('$Oaccuracy'),),
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    Expanded(child: Text("Posicion Actual"),),
+                    Expanded(child: Text('$latitude'),),
+                    Expanded(child: Text('$longitude'),),
+                    Expanded(child: Text('$altitude'),),
+                    Expanded(child: Text('$accuracy'),),
+                  ],
+                ),
+              ],
             )));
   }
 
