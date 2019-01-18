@@ -31,6 +31,18 @@ En Info.plist dentro de la carpeta ios/Runner
 Escanea imagen, entrega en pantalla la informacion obtenida del QR, metodos usados a continuacion
 * _scanQR() async : metodo que realiza el scan de QR y lo guarda en la variable 'result', tambien maneja
 errores.
+
+### Permisos
+En AndroidManifest.xml dentro de la capeta android/app/src/main
+```xml
+<uses-permission android:name="android.permission.CAMERA" />
+```
+
+En Info.plist dentro de la carpeta ios/Runner
+
+    <key>NSCameraUsageDescription</key>
+    <string>Camera permission is required for barcode scanning.</string>
+
 ## Wifi
 Muestra nombre red, IP y la intensidad escalada, mas cerca del 0 mas potente.
 * 1=rssi entre -80 y -100

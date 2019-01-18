@@ -7,6 +7,7 @@ class ScanResultTile extends StatelessWidget {
   final ScanResult result;
   final VoidCallback onTap;
 
+  /// Crea la vista por defecto con nombre e id /mac
   Widget _buildTitle(BuildContext context) {
     if (result.device.name.length > 0) {
       return Column(
@@ -25,12 +26,14 @@ class ScanResultTile extends StatelessWidget {
     }
   }
 
+  /// widget para crear filas bonitas con las descripciones
   Widget _buildAdvRow(BuildContext context, String title, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
+
           Text(title, style: Theme.of(context).textTheme.caption),
           SizedBox(
             width: 12.0,
@@ -50,11 +53,13 @@ class ScanResultTile extends StatelessWidget {
     );
   }
 
+  /// metodo que escribe una lista de bytes en hexadecimal
   String getNiceHexArray(List<int> bytes) {
     return '[${bytes.map((i) => i.toRadixString(16).padLeft(2, '0')).join(', ')}]'
         .toUpperCase();
   }
 
+  /// aparentemente MAC
   String getNiceManufacturerData(Map<int, List<int>> data) {
     if (data.isEmpty) {
       return null;
@@ -83,12 +88,6 @@ class ScanResultTile extends StatelessWidget {
     return ExpansionTile(
       title: _buildTitle(context),
       leading: Text(result.rssi.toString()),
-      trailing: RaisedButton(
-        child: Text('CONNECT'),
-        color: Colors.black,
-        textColor: Colors.white,
-        onPressed: (result.advertisementData.connectable) ? onTap : null,
-      ),
       children: <Widget>[
         _buildAdvRow(
             context, 'Complete Local Name', result.advertisementData.localName),
@@ -108,7 +107,9 @@ class ScanResultTile extends StatelessWidget {
                 : 'N/A'),
         _buildAdvRow(context, 'Service Data',
             getNiceServiceData(result.advertisementData.serviceData) ?? 'N/A'),
-        _buildAdvRow(context, 'rssi', result.rssi.toString())],
+        _buildAdvRow(context, 'RSSI', result.rssi.toString()),
+],
+      
     );
   }
 }
@@ -236,11 +237,13 @@ class DescriptorTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(1);
     var title = new Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         const Text('Descriptor'),
+        new Text('holi'),
         new Text(
             '0x${descriptor.uuid.toString().toUpperCase().substring(4, 8)}',
             style: Theme.of(context)
@@ -250,10 +253,12 @@ class DescriptorTile extends StatelessWidget {
       ],
     );
     return new ListTile(
+
       title: title,
       subtitle: new Text(descriptor.value.toString()),
       trailing: new Row(
         mainAxisSize: MainAxisSize.min,
+
         children: <Widget>[
           new IconButton(
             icon: new Icon(
@@ -261,7 +266,9 @@ class DescriptorTile extends StatelessWidget {
               color: Theme.of(context).iconTheme.color.withOpacity(0.5),
             ),
             onPressed: onReadPressed,
+
           ),
+
           new IconButton(
             icon: new Icon(
               Icons.file_upload,

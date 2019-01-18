@@ -64,11 +64,11 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
     deviceConnection = null;
     super.dispose();
   }
-
+/// Inicia el escaneo de dispositivos en rango
   _startScan() {
     _scanSubscription = _flutterBlue
         .scan(
-      timeout: const Duration(seconds: 5),
+      timeout: const Duration(seconds: 10),
     )
         .listen((scanResult) {
       setState(() {
@@ -76,13 +76,12 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
           scanResults[scanResult.device.id] = scanResult;
         }
       });
-    }, onDone: _stopScan);
-
+    }, onDone: _stopScan); /// cuando se termine el tiempo de escaneo, que detenga el stream de informacion
     setState(() {
       isScanning = true;
     });
   }
-
+/// maneja el termino de el escaneo
   _stopScan() {
     _scanSubscription?.cancel();
     _scanSubscription = null;
@@ -90,8 +89,6 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
       isScanning = false;
     });
   }
-
-
 
   _readCharacteristic(BluetoothCharacteristic c) async {
     await device.readCharacteristic(c);
@@ -103,15 +100,6 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
     setState(() {});
   }
 
-
-
-  _refreshDeviceState(BluetoothDevice d) async {
-    var state = await d.state;
-    setState(() {
-      deviceState = state;
-      print('State refreshed: $deviceState');
-    });
-  }
 
   /// Crea el boton para empezar y terminar el escaneo de dispositivos
   _buildScanningButton() {
@@ -131,6 +119,7 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
   }
 
   _buildScanResultTiles() {
+
     return scanResults.values
         .map((r) => ScanResultTile(
               result: r,
@@ -138,32 +127,7 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
         .toList();
   }
 
-  List<Widget> _buildServiceTiles() {
-    return services
-        .map(
-          (s) => new ServiceTile(
-                service: s,
-                characteristicTiles: s.characteristics
-                    .map(
-                      (c) => new CharacteristicTile(
-                            characteristic: c,
-                            onReadPressed: () => _readCharacteristic(c),
-                            descriptorTiles: c.descriptors
-                                .map(
-                                  (d) => new DescriptorTile(
-                                        descriptor: d,
-                                        onReadPressed: () => _readDescriptor(d),
-                                      ),
-                                )
-                                .toList(),
-                          ),
-                    )
-                    .toList(),
-              ),
-        )
-        .toList();
-  }
-
+  /// widget que muestra la alerta de bluetooth apagado.
   _buildAlertTile() {
     return new Container(
       color: Colors.redAccent,
@@ -180,21 +144,8 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
     );
   }
 
-  _buildDeviceStateTile() {
-    return new ListTile(
-        leading: (deviceState == BluetoothDeviceState.connected)
-            ? const Icon(Icons.bluetooth_connected)
-            : const Icon(Icons.bluetooth_disabled),
-        title: new Text('Device is ${deviceState.toString().split('.')[1]}.'),
-        subtitle: new Text('${device.id}'),
-        trailing: new IconButton(
-          icon: const Icon(Icons.refresh),
-          onPressed: () => _refreshDeviceState(device),
-          color: Theme.of(context).iconTheme.color.withOpacity(0.5),
-        ));
-  }
 
-  /// Barrita arriba para demostrar que que el escaneo esta en proceso
+  /// Barra superior para demostrar que que el escaneo esta en proceso
   _buildProgressBarTile() {
     return new LinearProgressIndicator();
   }
@@ -205,12 +156,8 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
     if (state != BluetoothState.on) {
       tiles.add(_buildAlertTile());
     }
-    if (isConnected) {
-      tiles.add(_buildDeviceStateTile());
-      tiles.addAll(_buildServiceTiles());
-    } else {
-      tiles.addAll(_buildScanResultTiles());
-    }
+    tiles.addAll(_buildScanResultTiles());
+
     return new MaterialApp(
       home: new Scaffold(
         appBar: new AppBar(
