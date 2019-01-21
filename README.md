@@ -37,7 +37,7 @@ de los dispositivos escaneados en rango. Tiene los siguientes metodos:
       String local name
       int txPowerLevel
       bool connectable
-      manufacturerData(Map<int,List<int>>)
+      Map<int,List<int>> manufacturerData
       Map<String, List<int>> serviceData
       List<String> serviceUuids
 
