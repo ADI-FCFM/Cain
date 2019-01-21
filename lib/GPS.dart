@@ -9,18 +9,16 @@ class gps extends StatefulWidget{
 }
 
 class gpsApp extends State<gps>{
-
-  int bla= 0;
-  Map<String, double> _startLocation; // mapa que guarda los datos de localizacion original
-  Map<String, double> _currentLocation; // mapa que guarda los datos de localizacion actual
+  Map<String, double> _startLocation; /// mapa que guarda los datos de localizacion original
+  Map<String, double> _currentLocation; /// mapa que guarda los datos de localizacion actual
   StreamSubscription<Map<String, double>> _locationSubscription;
-  Location _location = new Location(); // inicializa el objeto locacion para obtener la informacion
+  Location _location = new Location(); /// inicializa el objeto locacion de la libreria para obtener la informacion
   bool _permission = false;
   String error;
   bool currentWidget = true;
 
 
-  // metodo para inicializar el registro de informacion.
+  /// metodo para inicializar el registro de informacion.
   @override
   void initState() {
     super.initState();
@@ -35,11 +33,11 @@ class gpsApp extends State<gps>{
 
   // Platform messages are asynchronous, so we initialize in an async method.
   initPlatformState() async {
-    Map<String, double> location; // mapa auxiliar para guardar las locaciones dentro del metodo
-      _permission = await _location.hasPermission(); // checkea que la app tenga acceso al gps
-      location = await _location.getLocation(); // funcion para obtener la locacion
+    Map<String, double> location; /// mapa auxiliar para guardar las locaciones dentro del metodo
+      _permission = await _location.hasPermission(); /// checkea que la app tenga acceso al gps
+      location = await _location.getLocation(); /// funcion para obtener la locacion
       error = null;
-    // setState() sirve para notificar a la app que se genero un cambio.
+    /// setState() sirve para notificar a la app que se genero un cambio.
     setState(() {
       _startLocation = location;
     });
@@ -51,7 +49,7 @@ class gpsApp extends State<gps>{
     var longitude = _currentLocation["longitude"];
     var accuracy = _currentLocation["accuracy"];
     var altitude = _currentLocation["altitude"];
-
+    print(_startLocation);
     var Olatitude = _startLocation["latitude"];
     var Olongitude = _startLocation["longitude"];
     var Oaccuracy = _startLocation["accuracy"];
