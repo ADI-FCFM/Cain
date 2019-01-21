@@ -8,29 +8,67 @@ Se especificara cuando haya que inicializar objetos de la libreria para usarla.
 ## Bluetooth
 [Pagina de la libreria](https://pub.dartlang.org/packages/flutter_blue)
 
-Boton para iniciar escaneo de los dispositivos.
- De cada dispositivo muestra nombre, uuid, mac, rssi
+Busca los dispositivos bluetooth en las cercanias, y obtiene la informacion de los
+dispositivos( rrsi, uuid, mac entre otros elementos de interes.
+
+Metodos usados a continuacion:
+
+* __FlutterBlue.instance__: Inicializa objeto para usar la funcionalidad de la libreria
+
+* __state__: Reconoce el estado del bluetooth del dispositivo.
+BluetoothState.unknown es una enumeracion y se inicializa en unknow. Ademas de eso tiene unknown,unavailable,
+unauthorized, turningOn, turningOff, on, off como estados posibles
+
+* __BluetoothDevice device__: identifica el dispositivo que se esta usando.
+Usado para comprobar el estado del dispositivo.
+
+* __onStateChanged()__: se activa cuando detecta un cambio en la instancia de la libreria.
+
+* __listen(algo)__: cuando ocurre un cambio, entrega el valor actualizado como una variable
+(algo en este caso) para trabajar con ella.
+
+* __scan()__: empieza el escaneo de los dispositivos bluetooth de su cercania.
+Se le puede colocar un tiempo maximo de duracion del escaneo con el parametro
+timeout: const Duration(seconds minutes).
+
+* __advertisementData__: metodo que expone las caracteristicas obtenidas
+de los dispositivos escaneados en rango. Tiene los siguientes metodos:
+
+      String local name
+      int txPowerLevel
+      bool connectable
+      manufacturerData(Map<int,List<int>>)
+      Map<String, List<int>> serviceData
+      List<String> serviceUuids
+
+
 ### Observaciones
 Beacons **deben** tener un nombre.
+
+En el archivo [widgets.dart](../lib/widgets.dart) se encuentran clases para
+presentar de una forma limpia y ordenada la informacion obtenida de los
+dispositivos escaneados, por lo que se mantiene con pocos cambios en
+relacion a su implementacion original
 
 
 ## GPS
 
 [Pagina de la libreria](https://pub.dartlang.org/packages/location)
+
 Entregar longitud, latitud, ademas de entregar la precision del calculo.
 
 Metodos usados a continuacion:
 
-* __location = new Location()__: Inicializa un objeto para usar la libreria.
-* __location.onLocationChanged().listen((Map<String,double> result)__: usando
+* __new Location()__: Inicializa objeto para usar la libreria.
+* __onLocationChanged().listen((Map<String,double> result)__: usando
 el objeto location, detecta los cambios de posicion y los guarda en un mapa
 (result en este caso del tipo String-double).Se debe tener el metodo setState para actualizar cada
 vez que se recibe un cambio, ademas de que el resultado del metodo debe estar
 en un objeto de tipo StreamSubscription( similar a un observer) para que se
 pueda mantenere un seguimiento de la posicion
-* __location.hasPermission__: chequea que la aplicacion tenga permisos para
+* __hasPermission__:usando el objeto location chequea que la aplicacion tenga permisos para
 usar el GPS. Entrega un booleano
-* __location.getLocation__: pide una sola vez la informacion del GPS
+* __getLocation__: pide una sola vez la informacion del GPS al objeto location
 
 Como toda la informacion se guarda en un mapa, se especifica a continuacion
 los nombres con los que se guardan la informacion:
@@ -91,10 +129,5 @@ Los metodos usados a continuacion:
 * __Wifi.level__ : devuleve un valor numerico entre 1-3, arriba la descripcion. Usado en _getWifiLevel_()
 
 
-## Funciones utiles de conocer
 
-#### Para navegar entre vistas
-onPressed: () {Navigator.push(context,MaterialPageRoute(builder: (context)=>FirstScreen()));}
 
-#### Para devolverse segun el contexto que tiene ( Contexto == lista con las vistas recorridas en la app)
-onPressed: () {Navigator.pop(context);}

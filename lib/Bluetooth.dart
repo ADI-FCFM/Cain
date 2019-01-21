@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:beacons_manage/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
@@ -17,22 +16,17 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
   /// Scanning
   StreamSubscription _scanSubscription;
   Map<DeviceIdentifier, ScanResult> scanResults = new Map();
-  bool isScanning = false;
+  bool isScanning = false; /// verifica si se esta escaneando o no actualmente
 
   /// State
   StreamSubscription _stateSubscription; /// Detecta cambios de estado del Bluetooth
-  BluetoothState state = BluetoothState.unknown; /// Establece el estado en que se encuentra el bluetooth del dispositivo
+  BluetoothState state = BluetoothState.unknown; /// Establece el estado en que se encuentra el bluetooth del dispositivo, empieza con un estado desconocido
 
   /// Device
   BluetoothDevice device;
-
   bool get isConnected => (device != null);
   StreamSubscription deviceConnection;
   StreamSubscription deviceStateSubscription;
-  List<BluetoothService> services = new List();
-  Map<Guid, StreamSubscription> valueChangedSubscriptions = {};
-  BluetoothDeviceState deviceState = BluetoothDeviceState.disconnected;
-
 
   /// revisa el estado de el bluetooth.
   @override
@@ -51,7 +45,6 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
       });
     });
   }
-
 
   /// Maneja el estado del bluetooth cuando se desactiva
   @override
@@ -73,10 +66,11 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
         .listen((scanResult) {
       setState(() {
         if (scanResult.advertisementData.localName != "") {
-          scanResults[scanResult.device.id] = scanResult;
+          scanResults[scanResult.device.id] = scanResult; /// si encuentra alguno, lo agregara al mapa y lo listara
+        print(scanResult);
         }
       });
-    }, onDone: _stopScan); /// cuando se termine el tiempo de escaneo, que detenga el stream de informacion
+    }, onDone: _stopScan); /// cuando se termine el tiempo de escaneo, detiene el escaneo.
     setState(() {
       isScanning = true;
     });
@@ -89,18 +83,6 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
       isScanning = false;
     });
   }
-
-  _readCharacteristic(BluetoothCharacteristic c) async {
-    await device.readCharacteristic(c);
-    setState(() {});
-  }
-
-  _readDescriptor(BluetoothDescriptor d) async {
-    await device.readDescriptor(d);
-    setState(() {});
-  }
-
-
   /// Crea el boton para empezar y terminar el escaneo de dispositivos
   _buildScanningButton() {
     if (isConnected || state != BluetoothState.on) {
@@ -119,7 +101,6 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
   }
 
   _buildScanResultTiles() {
-
     return scanResults.values
         .map((r) => ScanResultTile(
               result: r,
@@ -157,7 +138,6 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
       tiles.add(_buildAlertTile());
     }
     tiles.addAll(_buildScanResultTiles());
-
     return new MaterialApp(
       home: new Scaffold(
         appBar: new AppBar(
