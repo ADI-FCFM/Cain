@@ -45,7 +45,7 @@ de los dispositivos escaneados en rango. Tiene los siguientes metodos:
 ### Observaciones
 Beacons **deben** tener un nombre.
 
-En el archivo [widgets.dart](../blob/master/lib/widgets.dart) se encuentran clases para
+En el archivo [widgets.dart](../master/lib/widgets.dart) se encuentran clases para
 presentar de una forma limpia y ordenada la informacion obtenida de los
 dispositivos escaneados, por lo que se mantiene con pocos cambios en
 relacion a su implementacion original
