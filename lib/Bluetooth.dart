@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 
 
-//widget para el bluetooth
+///widget para el bluetooth
 class FlutterBlueApp extends StatefulWidget {
   @override
   _FlutterBlueAppState createState() => new _FlutterBlueAppState();
@@ -13,8 +13,7 @@ class FlutterBlueApp extends StatefulWidget {
 class _FlutterBlueAppState extends State<FlutterBlueApp> {
   FlutterBlue _flutterBlue = FlutterBlue.instance;
 
-  ///Characteristics
-  BluetoothCharacteristic characteristic= new BluetoothCharacteristic();
+
   /// Scanning
   StreamSubscription _scanSubscription;
   Map<DeviceIdentifier, ScanResult> scanResults = new Map();
@@ -135,12 +134,7 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
 
   @override
   Widget build(BuildContext context) {
-    print(characteristic.serviceUuid);
-    print(characteristic.descriptors);
-    print(characteristic.properties);
-    print(characteristic.secondaryServiceUuid);
-    print(characteristic.uuid);
-    print(characteristic.value);
+
 
 
     var tiles = new List<Widget>();
