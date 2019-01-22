@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:beacons_manage/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-//TODO refactor y clarificacion del codigo.
+
 
 //widget para el bluetooth
 class FlutterBlueApp extends StatefulWidget {
@@ -13,6 +13,8 @@ class FlutterBlueApp extends StatefulWidget {
 class _FlutterBlueAppState extends State<FlutterBlueApp> {
   FlutterBlue _flutterBlue = FlutterBlue.instance;
 
+  ///Characteristics
+  BluetoothCharacteristic characteristic= new BluetoothCharacteristic();
   /// Scanning
   StreamSubscription _scanSubscription;
   Map<DeviceIdentifier, ScanResult> scanResults = new Map();
@@ -67,7 +69,7 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
       setState(() {
         if (scanResult.advertisementData.localName != "") {
           scanResults[scanResult.device.id] = scanResult; /// si encuentra alguno, lo agregara al mapa y lo listara
-        print(scanResult);
+
         }
       });
     }, onDone: _stopScan); /// cuando se termine el tiempo de escaneo, detiene el escaneo.
@@ -133,6 +135,14 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
 
   @override
   Widget build(BuildContext context) {
+    print(characteristic.serviceUuid);
+    print(characteristic.descriptors);
+    print(characteristic.properties);
+    print(characteristic.secondaryServiceUuid);
+    print(characteristic.uuid);
+    print(characteristic.value);
+
+
     var tiles = new List<Widget>();
     if (state != BluetoothState.on) {
       tiles.add(_buildAlertTile());

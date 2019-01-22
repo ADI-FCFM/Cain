@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'package:location/location.dart';
-//TODO refactor y clarificacion del codigo
+
 
 class gps extends StatefulWidget{
   gpsApp createState()=> new gpsApp();
