@@ -2,11 +2,15 @@
 Todas las implementaciones estan basadas en los ejemplos de las librerias que estan siendo utilizadas
 , se han realizado pequeños cambios con el objetivo de mostrar de forma mas clara lo que se ha pedido.
 
+Asegurarse que en el archivo [build.gradle](../master/android/app/build.gradle) ,
+compileSdkVersion y targetSdkVersion sea  28 y que minSdkVersion sea 19. Esto puede variar
+dependiendo la version del SDK de android y de a la velocidad que se actualizen las librerias
+
 
 Se especificara cuando haya que inicializar objetos de la libreria para usarla.
 
 ## Bluetooth
-[Pagina de la libreria](https://pub.dartlang.org/packages/flutter_blue)
+[Pagina de la libreria flutter_blue](https://pub.dartlang.org/packages/flutter_blue)
 
 Busca los dispositivos bluetooth en las cercanias, y obtiene la informacion de los
 dispositivos( rrsi, uuid, mac entre otros elementos de interes.
@@ -53,7 +57,7 @@ relacion a su implementacion original
 
 ## GPS
 
-[Pagina de la libreria](https://pub.dartlang.org/packages/location)
+[Pagina de la libreria location ](https://pub.dartlang.org/packages/location)
 
 Entregar longitud, latitud, ademas de entregar la precision del calculo.
 
@@ -81,11 +85,13 @@ los nombres con los que se guardan la informacion:
 ### Observaciones
 se demora entre 5-10 segundos en actualizar la locacion segun testeos
 ### Permisos 
-En AndroidManifest.xml dentro de la capeta android/app/src/main 
+En el archivo [AndroidManifest.xml](../master/android/app/src/main/AndroidManifest.xml)
+agregar lo siguiente
 ```xml
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 ```
-En Info.plist dentro de la carpeta ios/Runner
+En el archivo [Info.plist](../master/ios/Runner/Info.plist) agregar lo siguiente
+dentro del tag <dict>
 
      <key>NSLocationAlwaysUsageDescription</key>
      <string>Needed to access location</string>
@@ -93,7 +99,7 @@ En Info.plist dentro de la carpeta ios/Runner
      <string>Needed to access location</string>
 
 ## QR
-[Pagina de la libreria](https://pub.dartlang.org/packages/barcode_scan)
+[Pagina de la libreria barcode_scan](https://pub.dartlang.org/packages/barcode_scan)
 
 Escanea imagen, entrega en pantalla la informacion obtenida del QR. Es un
 wrapper de 2 librerias QR de android y de iOS
@@ -105,12 +111,14 @@ devuelve un string con la informacion sacada del QR. Usada dentro de la
 funcion  _scanQR_
 
 ### Permisos
-En AndroidManifest.xml dentro de la capeta android/app/src/main
+En el archivo [AndroidManifest.xml](../master/android/app/src/main/AndroidManifest.xml)
+agregar lo siguiente
 ```xml
 <uses-permission android:name="android.permission.CAMERA" />
 ```
 
-En Info.plist dentro de la carpeta ios/Runner
+En el archivo [Info.plist](../master/ios/Runner/Info.plist) agregar lo siguiente
+dentro del tag <dict>
 
     <key>NSCameraUsageDescription</key>
     <string>Camera permission is required for barcode scanning.</string>
@@ -129,5 +137,14 @@ Los metodos usados a continuacion:
 * __Wifi.level__ : devuleve un valor numerico entre 1-3, arriba la descripcion. Usado en _getWifiLevel_()
 
 
+## Libreria Adicional
+[Pagina de libreria flutter_beacon](https://pub.dartlang.org/packages/flutter_beacon)
 
+Libreria para manejo de iBeacons exclusivamente.
+Entrega uuid, rssi, mayor, minor y la distancia aproximada al beacon
+Funciona con iOS8+
 
+### Permisos
+Para iOS
+          <key>NSLocationWhenInUseUsageDescription</key>
+          <string>Reason why app needs location</string>
