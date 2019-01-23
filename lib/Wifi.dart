@@ -45,7 +45,11 @@ class wifiApp extends State<wifi>{
   /// Constructor de la Vista del WIFI
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return new MaterialApp(
+        theme: ThemeData(
+          primarySwatch: Colors.green,
+        ),
+      home: Scaffold(
       appBar: AppBar(
         title: Text('Wifi'),
       ),
@@ -86,6 +90,7 @@ class wifiApp extends State<wifi>{
           ],
         ),
       ),
+    )
     );
   }
 

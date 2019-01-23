@@ -54,7 +54,13 @@ class qrAppState extends State<qr>{
   /// constructor de la vista.
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+
+    return new MaterialApp(
+        theme: ThemeData(
+          primarySwatch: Colors.deepPurple,
+        ),
+      home:Scaffold(
+
       appBar: AppBar(
         title: Text("QR Scanner"),
       ),
@@ -73,6 +79,7 @@ class qrAppState extends State<qr>{
         onPressed: _scanQR,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+    )
     );
   }
 }

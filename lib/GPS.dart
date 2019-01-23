@@ -56,6 +56,9 @@ class gpsApp extends State<gps>{
     var Oaltitude = _startLocation["altitude"];
 
     return new MaterialApp(
+        theme: ThemeData(
+          primarySwatch: Colors.red,
+        ),
         home: new Scaffold(
             appBar: new AppBar(
               title: new Text('Location plugin example app'),
