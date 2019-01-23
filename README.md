@@ -141,8 +141,22 @@ Los metodos usados a continuacion:
 [Pagina de libreria flutter_beacon](https://pub.dartlang.org/packages/flutter_beacon)
 
 Libreria para manejo de iBeacons exclusivamente.
-Entrega uuid, rssi, mayor, minor y la distancia aproximada al beacon
+Entrega uuid, rssi, mayor, minor, txPower, MAC y un aproximado de la precision
 Funciona con iOS8+
+
+Utiles de la libreria usados a continuacion:
+
+* __Beacon__ tipo de objeto que almacena las caracteristicas de cada una de las
+beacons encontradas, metodos para obtener su informacion a continuacion
+
+        proximityUUID
+        major
+        minor
+        acurracy
+        rssi
+        txPower
+        macAddress
+
 
 ### Permisos
 En el archivo [Info.plist](../master/ios/Runner/Info.plist) agregar lo siguiente

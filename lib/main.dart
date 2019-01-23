@@ -26,27 +26,27 @@ class HubScreen extends StatelessWidget{
       children: <Widget>[
         RaisedButton(
           color: Colors.blue,
-          onPressed: (){Navigator.push(context,MaterialPageRoute(builder: (context)=>FlutterBlueApp()));},
+          onPressed: (){Navigator.push(context,MaterialPageRoute(builder: (context)=>new FlutterBlueApp()));},
           child: Text("Bluetooth"),
         ),
         RaisedButton(
           color: Colors.redAccent,
-          onPressed: (){Navigator.push(context,MaterialPageRoute(builder: (context)=>gps()));},
+          onPressed: (){Navigator.push(context,MaterialPageRoute(builder: (context)=>new gps()));},
           child: Text("GPS"),
         ),
         RaisedButton(
           color: Colors.lightGreen,
-          onPressed: (){Navigator.push(context,MaterialPageRoute(builder: (context)=>wifi()));},
+          onPressed: (){Navigator.push(context,MaterialPageRoute(builder: (context)=>new wifi()));},
           child: Text("WIFI"),
         ),
         RaisedButton(
           color: Colors.deepPurpleAccent,
-          onPressed: (){Navigator.push(context,MaterialPageRoute(builder: (context)=>qr()));},
+          onPressed: (){Navigator.push(context,MaterialPageRoute(builder: (context)=>new qr()));},
           child: Text("QR"),
         ),
         RaisedButton(
           color: Colors.yellow,
-          onPressed: (){Navigator.push(context,MaterialPageRoute(builder: (context)=>Beacons()));},
+          onPressed: (){Navigator.push(context,MaterialPageRoute(builder: (context)=>new Beacons()));},
           child: Text("Beacons"),
         ),
       ],

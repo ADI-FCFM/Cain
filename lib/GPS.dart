@@ -13,11 +13,19 @@ class gpsApp extends State<gps>{
   Map<String, double> _currentLocation; /// mapa que guarda los datos de localizacion actual
   StreamSubscription<Map<String, double>> _locationSubscription;
   Location _location = new Location(); /// inicializa el objeto locacion de la libreria para obtener la informacion
-  bool _permission = false;
+  bool _permission = false; /// maneja los permisos que el dispositivo le da a la aplicacion
   String error;
-  bool currentWidget = true;
+  bool currentWidget = true; ///verifica si el widget es el widget actual de la app
 
-
+  /// metodo cancelar las subscripciones
+  @override
+  void dispose() {
+    if (_locationSubscription != null) {
+      _locationSubscription.cancel();
+      currentWidget=false;
+    }
+    super.dispose();
+  }
   /// metodo para inicializar el registro de informacion.
   @override
   void initState() {

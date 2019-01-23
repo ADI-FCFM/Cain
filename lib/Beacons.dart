@@ -1,8 +1,6 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'dart:async';
-
 import 'package:flutter/services.dart';
 import 'package:flutter_beacon/flutter_beacon.dart';
 
@@ -15,26 +13,26 @@ class Beacons extends StatefulWidget {
 
 class _BeaconsState extends State<Beacons> {
   StreamSubscription<RangingResult> _streamRanging;
-  final _regionBeacons = <Region, List<Beacon>>{};
-  final _beacons = <Beacon>[];
+  final _regionBeacons = <Region, List<Beacon>>{};  ///almacena las "regiones" en las que se encuentras los beacons
+  final _beacons = <Beacon>[]; ///para tener en una "lista cada" beacon que este en el rango
 
+  /// metodo que se ejecuta al iniciar el objeto BeaconsState
   @override
   void initState() {
     super.initState();
-
     initBeacon();
   }
 
   initBeacon() async {
     try {
-      await flutterBeacon.initializeScanning;
+      await flutterBeacon.initializeScanning; ///llama a objeto de la libreria para que maneje el escaneo
       print('Beacon scanner initialized');
     } on PlatformException catch (e) {
       print(e);
     }
 
     final regions = <Region>[];
-
+/// diferencia como inicializa las plataformas
     if (Platform.isIOS ) {
       regions.add(
         Region(
@@ -48,20 +46,22 @@ class _BeaconsState extends State<Beacons> {
       regions.add(Region(identifier: 'com.beacon'));
     }
 
-    _streamRanging = flutterBeacon.ranging(regions).listen((result) {
-      if (result != null && mounted) {
+    _streamRanging = flutterBeacon.ranging(regions).listen((result) { ///busca beacons dentro de las regiones almacenadas, guarda los resultados del ranging
+      ///dentro de la variable result
+      if (result != null && mounted) { /// mounted aparentemente implica si esta encendido bluetooh y si esta corriendo la app
         setState(() {
           _regionBeacons[result.region] = result.beacons;
           _beacons.clear();
           _regionBeacons.values.forEach((list) {
             _beacons.addAll(list);
           });
-          _beacons.sort(_compareParameters);
+          _beacons.sort(_compareParameters); ///ordena las beacons encontradas
         });
       }
     });
   }
 
+  ///estable un orden en el que aparecen las beacons en la lista
   int _compareParameters(Beacon a, Beacon b) {
     int compare = a.proximityUUID.compareTo(b.proximityUUID);
 
@@ -76,6 +76,8 @@ class _BeaconsState extends State<Beacons> {
     return compare;
   }
 
+
+  /// metodo para cancelar subscripciones y evitar que siga leyendo informacion
   @override
   void dispose() {
     if (_streamRanging != null) {
@@ -87,16 +89,18 @@ class _BeaconsState extends State<Beacons> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        primarySwatch: Colors.yellow,
+      ),
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Flutter Beacon'),
         ),
-        body: _beacons == null
-            ? Center(child: CircularProgressIndicator())
-            : ListView(
+        body:  ListView(
           children: ListTile.divideTiles(
               context: context,
-              tiles: _beacons.map((beacon) {
+              tiles: _beacons.map((beacon) {  ///Ordena los beacons en un mapa, y usa  beacon variable
+                /// para trabajar con cada una de las beacons
                 return ListTile(
                   title: Text(beacon.proximityUUID),
                   subtitle: new Row(
@@ -113,7 +117,14 @@ class _BeaconsState extends State<Beacons> {
                               'Accuracy: ${beacon.accuracy}m\nRSSI: ${beacon.rssi}',
                               style: TextStyle(fontSize: 13.0)),
                           flex: 2,
-                          fit: FlexFit.tight)
+                          fit: FlexFit.tight),
+                      Flexible(
+                        child: Text('txPower: ${beacon.txPower}\n MAC: ${beacon.macAddress}',
+                            style: TextStyle(fontSize: 13.0)
+                        ),
+                        flex: 3,
+                        fit: FlexFit.tight,
+                      )
                     ],
                   ),
                 );

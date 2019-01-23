@@ -17,7 +17,7 @@ class qrAppState extends State<qr>{
   /// errores en caso que haya
   Future _scanQR() async {
     try {
-      //BarcodeScanner.scan es la funcion que realiza el Scan del QR.
+      ///BarcodeScanner.scan es la funcion que realiza el Scan del QR.
       String qrResult = await BarcodeScanner.scan();
       setState(() {
         result = qrResult;

@@ -134,9 +134,6 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
 
   @override
   Widget build(BuildContext context) {
-
-
-
     var tiles = new List<Widget>();
     if (state != BluetoothState.on) {
       tiles.add(_buildAlertTile());
@@ -151,7 +148,7 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
         floatingActionButton: _buildScanningButton(),
         body: new Stack(
           children: <Widget>[
-            (isScanning) ? _buildProgressBarTile() : new Container(),
+            (isScanning) ? _buildProgressBarTile() : new Container(), ///añade barrita de progreso durante el escaneo
             new ListView(
               children: tiles,
             )
