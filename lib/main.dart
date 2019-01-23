@@ -1,3 +1,4 @@
+import 'package:beacons_manage/Beacons.dart';
 import 'package:beacons_manage/Bluetooth.dart';
 import 'package:beacons_manage/GPS.dart';
 import 'package:beacons_manage/QR.dart';
@@ -42,6 +43,11 @@ class HubScreen extends StatelessWidget{
           color: Colors.deepPurpleAccent,
           onPressed: (){Navigator.push(context,MaterialPageRoute(builder: (context)=>qr()));},
           child: Text("QR"),
+        ),
+        RaisedButton(
+          color: Colors.yellow,
+          onPressed: (){Navigator.push(context,MaterialPageRoute(builder: (context)=>Beacons()));},
+          child: Text("Beacons"),
         ),
       ],
           ),

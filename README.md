@@ -91,7 +91,7 @@ agregar lo siguiente
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 ```
 En el archivo [Info.plist](../master/ios/Runner/Info.plist) agregar lo siguiente
-dentro del tag <dict>
+dentro del tag dict
 
      <key>NSLocationAlwaysUsageDescription</key>
      <string>Needed to access location</string>
@@ -118,7 +118,7 @@ agregar lo siguiente
 ```
 
 En el archivo [Info.plist](../master/ios/Runner/Info.plist) agregar lo siguiente
-dentro del tag <dict>
+dentro del tag dict
 
     <key>NSCameraUsageDescription</key>
     <string>Camera permission is required for barcode scanning.</string>
@@ -145,6 +145,8 @@ Entrega uuid, rssi, mayor, minor y la distancia aproximada al beacon
 Funciona con iOS8+
 
 ### Permisos
-Para iOS
-          <key>NSLocationWhenInUseUsageDescription</key>
-          <string>Reason why app needs location</string>
+En el archivo [Info.plist](../master/ios/Runner/Info.plist) agregar lo siguiente
+dentro del tag dict
+
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>Reason why app needs location</string>
