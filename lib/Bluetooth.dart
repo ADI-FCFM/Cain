@@ -1,8 +1,13 @@
 import 'dart:async';
 import 'package:beacons_manage/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_beacon/flutter_beacon.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-
+import 'dart:io';
+import 'package:flutter/material.dart';
+import 'dart:async';
+import 'package:flutter/services.dart';
+import 'package:flutter_beacon/flutter_beacon.dart';
 
 ///widget para el bluetooth
 class FlutterBlueApp extends StatefulWidget {
@@ -13,18 +18,24 @@ class FlutterBlueApp extends StatefulWidget {
 class _FlutterBlueAppState extends State<FlutterBlueApp> {
   FlutterBlue _flutterBlue = FlutterBlue.instance;
 
-
   /// Scanning
   StreamSubscription _scanSubscription;
   Map<DeviceIdentifier, ScanResult> scanResults = new Map();
-  bool isScanning = false; /// verifica si se esta escaneando o no actualmente
+  bool isScanning = false;
+
+  /// verifica si se esta escaneando o no actualmente
 
   /// State
-  StreamSubscription _stateSubscription; /// Detecta cambios de estado del Bluetooth
-  BluetoothState state = BluetoothState.unknown; /// Establece el estado en que se encuentra el bluetooth del dispositivo, empieza con un estado desconocido
+  StreamSubscription _stateSubscription;
+
+  /// Detecta cambios de estado del Bluetooth
+  BluetoothState state = BluetoothState.unknown;
+
+  /// Establece el estado en que se encuentra el bluetooth del dispositivo, empieza con un estado desconocido
 
   /// Device
   BluetoothDevice device;
+
   bool get isConnected => (device != null);
   StreamSubscription deviceConnection;
   StreamSubscription deviceStateSubscription;
@@ -33,12 +44,15 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
   @override
   void initState() {
     super.initState();
+    initBeacon();
+
     /// Immediately get the state of FlutterBlue
     _flutterBlue.state.then((s) {
       setState(() {
         state = s;
       });
     });
+
     /// Subscribe to state changes
     _stateSubscription = _flutterBlue.onStateChanged().listen((s) {
       setState(() {
@@ -56,9 +70,13 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
     _scanSubscription = null;
     deviceConnection?.cancel();
     deviceConnection = null;
+    if (_streamRanging != null) {
+      _streamRanging.cancel();
+    }
     super.dispose();
   }
-/// Inicia el escaneo de dispositivos en rango
+
+  /// Inicia el escaneo de dispositivos en rango
   _startScan() {
     _scanSubscription = _flutterBlue
         .scan(
@@ -67,16 +85,21 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
         .listen((scanResult) {
       setState(() {
         if (scanResult.advertisementData.localName != "") {
-          scanResults[scanResult.device.id] = scanResult; /// si encuentra alguno, lo agregara al mapa y lo listara
+          scanResults[scanResult.device.id] = scanResult;
+
+          /// si encuentra alguno, lo agregara al mapa y lo listara
 
         }
       });
-    }, onDone: _stopScan); /// cuando se termine el tiempo de escaneo, detiene el escaneo.
+    }, onDone: _stopScan);
+
+    /// cuando se termine el tiempo de escaneo, detiene el escaneo.
     setState(() {
       isScanning = true;
     });
   }
-/// maneja el termino de el escaneo
+
+  /// maneja el termino de el escaneo
   _stopScan() {
     _scanSubscription?.cancel();
     _scanSubscription = null;
@@ -84,6 +107,7 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
       isScanning = false;
     });
   }
+
   /// Crea el boton para empezar y terminar el escaneo de dispositivos
   _buildScanningButton() {
     if (isConnected || state != BluetoothState.on) {
@@ -103,9 +127,10 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
 
   _buildScanResultTiles() {
     return scanResults.values
-        .map((r) => ScanResultTile(
-              result: r,
-            ))
+        .map((r) =>
+        ScanResultTile(
+          result: r,
+        ))
         .toList();
   }
 
@@ -116,11 +141,18 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
       child: new ListTile(
         title: new Text(
           'Bluetooth adapter is ${state.toString().substring(15)}',
-          style: Theme.of(context).primaryTextTheme.subhead,
+          style: Theme
+              .of(context)
+              .primaryTextTheme
+              .subhead,
         ),
         trailing: new Icon(
           Icons.error,
-          color: Theme.of(context).primaryTextTheme.subhead.color,
+          color: Theme
+              .of(context)
+              .primaryTextTheme
+              .subhead
+              .color,
         ),
       ),
     );
@@ -139,6 +171,7 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
       tiles.add(_buildAlertTile());
     }
     tiles.addAll(_buildScanResultTiles());
+
     return new MaterialApp(
       home: new Scaffold(
         appBar: new AppBar(
@@ -147,14 +180,118 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
         ),
         floatingActionButton: _buildScanningButton(),
         body: new Stack(
+          alignment: Alignment.bottomCenter,
           children: <Widget>[
-            (isScanning) ? _buildProgressBarTile() : new Container(), ///añade barrita de progreso durante el escaneo
+
+
+            (isScanning) ? _buildProgressBarTile() : new Container(),
+
+            ///añade barrita de progreso durante el escaneo
             new ListView(
               children: tiles,
-            )
+            ),
+            (_extraBuild()),
+
           ],
         ),
       ),
     );
   }
+
+
+  ///la otra libreria :D
+
+  StreamSubscription<RangingResult> _streamRanging;
+  final _regionBeacons = <Region, List<Beacon>>{};
+  final _beacons = <Beacon>[];
+
+  initBeacon() async {
+    try {
+      await flutterBeacon.initializeScanning; ///llama a objeto de la libreria para que maneje el escaneo
+      print('Beacon scanner initialized');
+    } on PlatformException catch (e) {
+      print(e);
+    }
+
+    final regions = <Region>[];
+    /// diferencia como inicializa las plataformas
+    if (Platform.isIOS ) {
+      regions.add(
+        Region(
+            identifier: 'Cubeacon',
+            proximityUUID: 'CB10023F-A318-3394-4199-A8730C7C1AEC'),
+      );
+      regions.add(Region(
+          identifier: 'Apple Airlocate',
+          proximityUUID: 'E2C56DB5-DFFB-48D2-B060-D0F5A71096E0'));
+    } else {
+      regions.add(Region(identifier: 'com.beacon'));
+    }
+
+    _streamRanging = flutterBeacon.ranging(regions).listen((result) { ///busca beacons dentro de las regiones almacenadas, guarda los resultados del ranging
+      ///dentro de la variable result
+      if (result != null && mounted) { /// mounted aparentemente implica si esta encendido bluetooh y si esta corriendo la app
+        setState(() {
+          _regionBeacons[result.region] = result.beacons;
+          _beacons.clear();
+          _regionBeacons.values.forEach((list) {
+            _beacons.addAll(list);
+          });
+          _beacons.sort(_compareParameters); ///ordena las beacons encontradas
+        });
+      }
+    });
+  }
+  int _compareParameters(Beacon a, Beacon b) {
+    int compare = a.proximityUUID.compareTo(b.proximityUUID);
+
+    if (compare == 0) {
+      compare = a.major.compareTo(b.major);
+    }
+
+    if (compare == 0) {
+      compare = a.minor.compareTo(b.minor);
+    }
+
+    return compare;
+  }
+
+  _extraBuild(){
+    return new ListView(
+      children: ListTile.divideTiles(
+          context: context,
+          tiles: _beacons.map((beacon) {  ///Ordena los beacons en un mapa, y usa  beacon variable
+            /// para trabajar con cada una de las beacons
+            return ListTile(
+              title: Text(beacon.proximityUUID),
+              subtitle: new Row(
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  Flexible(
+                      child: Text(
+                          'Major: ${beacon.major}\nMinor: ${beacon.minor}',
+                          style: TextStyle(fontSize: 13.0)),
+                      flex: 1,
+                      fit: FlexFit.tight),
+                  Flexible(
+                      child: Text(
+                          'Accuracy: ${beacon.accuracy}m\nRSSI: ${beacon.rssi}',
+                          style: TextStyle(fontSize: 13.0)),
+                      flex: 2,
+                      fit: FlexFit.tight),
+                  Flexible(
+                    child: Text('txPower: ${beacon.txPower}\n MAC: ${beacon.macAddress}',
+                        style: TextStyle(fontSize: 13.0)
+                    ),
+                    flex: 3,
+                    fit: FlexFit.tight,
+                  )
+                ],
+              ),
+            );
+          })).toList(),
+    );
+  }
+
+
 }
