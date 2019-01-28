@@ -4,10 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_beacon/flutter_beacon.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'dart:io';
-import 'package:flutter/material.dart';
-import 'dart:async';
 import 'package:flutter/services.dart';
-import 'package:flutter_beacon/flutter_beacon.dart';
+
 
 ///widget para el bluetooth
 class FlutterBlueApp extends StatefulWidget {
@@ -179,12 +177,18 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
           centerTitle: true,
         ),
         floatingActionButton: _buildScanningButton(),
+
+
+        ///Se sobrelapan la visualizacion de la vista de la informacion generada
+        ///por las 2 librerias, habria que cambiar como se visualizan las vistas para arreglarlo
         body: new Stack(
           alignment: Alignment.bottomCenter,
           children: <Widget>[
 
 
-            (isScanning) ? _buildProgressBarTile() : new Container(),
+            (isScanning) ? _buildProgressBarTile() : new Container(
+
+            ),
 
             ///añade barrita de progreso durante el escaneo
             new ListView(
@@ -212,7 +216,6 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
     } on PlatformException catch (e) {
       print(e);
     }
-
     final regions = <Region>[];
     /// diferencia como inicializa las plataformas
     if (Platform.isIOS ) {
