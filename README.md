@@ -1,4 +1,4 @@
-#  Proyecto Cain
+#  Proyecto Caín
 El objetivo de este proyecto de investigación es conocer las capacidades que tiene el framework Flutter para usarlo en posicionamiento indoor. 
 
 La motivación detrás de este proyecto es poder integrar las capacidades de posicionamiento indoor en la aplicación [Hades](https://github.com/ADI-FCFM/Hades) con la finalidad de filtrar los accesos que se disponibilizan al usuario basado en su ubicación dentro de la facultad.
