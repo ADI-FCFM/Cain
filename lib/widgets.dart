@@ -4,6 +4,7 @@ import 'package:flutter_blue/flutter_blue.dart';
 class ScanResultTile extends StatelessWidget {
   const ScanResultTile({Key key, this.result, this.onTap}) : super(key: key);
 
+  /// Obejto que guarda la informacion obtenida del Scan
   final ScanResult result;
   final VoidCallback onTap;
 
@@ -58,7 +59,7 @@ class ScanResultTile extends StatelessWidget {
         .toUpperCase();
   }
 
-  /// aparentemente MAC
+  /// entrega en formato hexadecimal el MAC
   String getNiceManufacturerData(Map<int, List<int>> data) {
     if (data.isEmpty) {
       return null;
@@ -71,6 +72,7 @@ class ScanResultTile extends StatelessWidget {
     return res.join(', ');
   }
 
+  /// entrega en formato hexadecimal
   String getNiceServiceData(Map<String, List<int>> data) {
     if (data.isEmpty) {
       return null;
@@ -95,8 +97,8 @@ class ScanResultTile extends StatelessWidget {
         _buildAdvRow(
             context,
             'Manufacturer Data',
-            getNiceManufacturerData(
-                    result.advertisementData.manufacturerData) ??
+
+                    result.advertisementData.manufacturerData.toString() ??
                 'N/A'),
         _buildAdvRow(
             context,
@@ -105,8 +107,9 @@ class ScanResultTile extends StatelessWidget {
                 ? result.advertisementData.serviceUuids.join(', ').toUpperCase()
                 : 'N/A'),
         _buildAdvRow(context, 'Service Data',
-            getNiceServiceData(result.advertisementData.serviceData) ?? 'N/A'),
+        result.advertisementData.serviceData.toString() ?? 'N/A'),
         _buildAdvRow(context, 'RSSI', result.rssi.toString()),
+
       ],
     );
   }

@@ -30,7 +30,7 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
   /// Establece el estado en que se encuentra el bluetooth del dispositivo, empieza con un estado desconocido
   BluetoothState state = BluetoothState.unknown;
 
-  /// Device
+  /// Identifica el dispositivo bluetooth detectado.
   BluetoothDevice device;
 
   bool get isConnected => (device != null);
@@ -177,7 +177,11 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
             new ListView(
               children: tiles,
             ),
-            (_extraBuild()),  ///datos de la libreria Flutter_beacons
+            ///datos de la libreria Flutter_beacons, si lo
+            ///activo no deja usar el menu desplegable de la libreria inicial, por eso
+            ///esta comentado
+           // (_extraBuild()),
+
           ],
         ),
       ),
@@ -203,6 +207,8 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
     final regions = <Region>[];
 
     /// diferencia como inicializa las plataformas
+    /// los datos presentes fueron provistos por la libreria, y como no tengo
+    /// iOS para jugar con ellos preferi dejarlos
     if (Platform.isIOS) {
       regions.add(
         Region(

@@ -13,18 +13,44 @@ Se especificará cuando haya que inicializar objetos de la librería para usarla
 [Página de la librería flutter_blue](https://pub.dartlang.org/packages/flutter_blue)
 
 Busca los dispositivos bluetooth en las cercanías, y obtiene la información de los
-dispositivos (rrsi, uuid, mac entre otros elementos de interés).
+dispositivos detectados (rrsi, uuid, mac entre otros elementos de interés).
 
-Métodos usados a continuación:
+Métodos y objetos usados a continuación:
+* __ScanResult__: objeto que almacena la informacion resultante del escaneo
+realizado. Tiene los siguientes metodos
+
+        advertisementData: informacion del dispositivo
+        device: dispositivo obtenido
+        rrsi: intensidad de la señal
+
+* __device__: identifica el dispositivo bluetooth que se
+ está detectando. Usado para comprobar el estado del dispositivo inicializandolo
+ previamente con BluetoothDevice.
+  Tiene los siguientes metodos:
+
+        id: entrega el MAC del dispositivo.
+        nombre: Nombre con el que se identifica el dispositivo.
+        type: numeració n para detectar el tipo de dispositivo que fue detectado
+        segun la tecnología ocupadad por este. Tiene 4 estados posibles
+        (unknown, classic, le, dual)
+
+* __advertisementData__: método que expone las características obtenidas
+de los dispositivos escaneados en rango. Tiene los siguientes métodos que
+entregan la informacion del dispositivo:
+
+      String local name
+      int txPowerLevel
+      bool connectable
+      Map<int,List<int>> manufacturerData
+      Map<String, List<int>> serviceData
+      List<String> serviceUuids
 
 * __FlutterBlue.instance__: Inicializa objeto para usar la funcionalidad de la librería.
 
 * __state__: Reconoce el estado del bluetooth del dispositivo.
-BluetoothState.unknown es una enumeración y se inicializa en unknow. Además de eso tiene unknown,unavailable,
-unauthorized, turningOn, turningOff, on, off como estados posibles.
-
-* __BluetoothDevice device__: identifica el dispositivo que se está usando.
-Usado para comprobar el estado del dispositivo.
+BluetoothState.unknown es una enumeración y se inicializa en unknow.
+ Además de eso tiene como estados posibles __unknown,unavailable,
+unauthorized, turningOn, turningOff, on, off__ .
 
 * __onStateChanged()__: se activa cuando detecta un cambio en la instancia de la librería.
 
@@ -35,15 +61,7 @@ Usado para comprobar el estado del dispositivo.
 Se le puede colocar un tiempo máximo de duración del escaneo con el parametro
 timeout: const Duration(seconds minutes).
 
-* __advertisementData__: método que expone las características obtenidas
-de los dispositivos escaneados en rango. Tiene los siguientes métodos:
 
-      String local name
-      int txPowerLevel
-      bool connectable
-      Map<int,List<int>> manufacturerData
-      Map<String, List<int>> serviceData
-      List<String> serviceUuids
 
 
 ### Observaciones
