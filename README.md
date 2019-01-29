@@ -1,5 +1,5 @@
 # Disclaimer:
-Todas las implementaciones están basadas en los ejemplos de las librerías que estan siendo utilizadas
+Todas las implementaciones están basadas en los ejemplos de las librerías que están siendo utilizadas
 , se han realizado pequeños cambios con el objetivo de mostrar de forma más clara lo que se ha pedido.
 
 Asegurarse que en el archivo [build.gradle](../master/android/app/build.gradle) ,
@@ -13,7 +13,7 @@ Se especificará cuando haya que inicializar objetos de la librería para usarla
 [Pagina de la librería flutter_blue](https://pub.dartlang.org/packages/flutter_blue)
 
 Busca los dispositivos bluetooth en las cercanías, y obtiene la información de los
-dispositivos( rrsi, uuid, mac entre otros elementos de interés.
+dispositivos (rrsi, uuid, mac entre otros elementos de interés).
 
 Métodos usados a continuación:
 
@@ -35,7 +35,7 @@ Usado para comprobar el estado del dispositivo.
 Se le puede colocar un tiempo máximo de duración del escaneo con el parametro
 timeout: const Duration(seconds minutes).
 
-* __advertisementData__: metodo que expone las caracteristicas obtenidas
+* __advertisementData__: método que expone las características obtenidas
 de los dispositivos escaneados en rango. Tiene los siguientes metodos:
 
       String local name
@@ -52,22 +52,22 @@ Beacons **deben** tener un nombre(_local name_).
 En el archivo [widgets.dart](../master/lib/widgets.dart) se encuentran clases para
 presentar de una forma limpia y ordenada la información obtenida de los
 dispositivos escaneados, por lo que se mantiene con pocos cambios en
-relacion a su implementacion original.
+relación a su implementación original.
 
 
 ## GPS
 
-[Pagina de la librería location ](https://pub.dartlang.org/packages/location)
+[Página de la librería location](https://pub.dartlang.org/packages/location)
 
 Entregar longitud, latitud, además de entregar la precisión del cálculo.
 
-Métodos usados a continuacion:
+Métodos usados a continuación
 
 * __new Location()__: Inicializa objeto para usar la librería.
 * __onLocationChanged().listen((Map<String,double> result)__: usando
 el objeto location, detecta los cambios de posición y los guarda en un mapa
-(result en este caso del tipo String-double).Se debe tener el metodo setState para actualizar cada
-vez que se recibe un cambio, además de que el resultado del metodo debe estar
+(result en este caso del tipo String-double).Se debe tener el método setState para actualizar cada
+vez que se recibe un cambio, además de que el resultado del método debe estar
 en un objeto de tipo StreamSubscription( similar a un observer) para que se
 pueda mantenere un seguimiento de la posición.
 * __hasPermission__:usando el objeto location chequea que la aplicación tenga permisos para
@@ -104,7 +104,7 @@ dentro del tag dict
 Escanea imagen, entrega en pantalla la informacion obtenida del QR. Es un
 wrapper de 2 librerias QR de android y de iOS.
 
-Metodos usados a continuación:
+Métodos usados a continuación:
 
 * __BarcodeScanner.scan()__: función de la librería para iniciar el escaneo,
 devuelve un string con la informacion sacada del QR. Usada dentro de la
