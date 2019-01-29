@@ -177,7 +177,7 @@ beacons encontradas, métodos para obtener su información a continuación
         macAddress
 
 
-### Permisos
+### Permisos:
 En el archivo [Info.plist](../master/ios/Runner/Info.plist) agregar lo siguiente
 dentro del tag dict
 
