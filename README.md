@@ -1,6 +1,6 @@
 # Disclaimer:
-Todas las implementaciones están basadas en los ejemplos de las librerías que están siendo utilizadas
-, se han realizado pequeños cambios con el objetivo de mostrar de forma más clara lo que se ha pedido.
+Todas las implementaciones están basadas en los ejemplos de las librerías que están siendo utilizadas,
+se han realizado pequeños cambios con el objetivo de mostrar de forma más clara lo que se ha pedido.
 
 Asegurarse que en el archivo [build.gradle](../master/android/app/build.gradle) ,
 compileSdkVersion y targetSdkVersion sea  28 y que minSdkVersion sea 19. Esto puede variar
@@ -10,7 +10,7 @@ dependiendo la version del SDK de android y de a la velocidad que se actualizen 
 Se especificará cuando haya que inicializar objetos de la librería para usarla.
 
 ## Bluetooth
-[Pagina de la librería flutter_blue](https://pub.dartlang.org/packages/flutter_blue)
+[Página de la librería flutter_blue](https://pub.dartlang.org/packages/flutter_blue)
 
 Busca los dispositivos bluetooth en las cercanías, y obtiene la información de los
 dispositivos (rrsi, uuid, mac entre otros elementos de interés).
@@ -36,7 +36,7 @@ Se le puede colocar un tiempo máximo de duración del escaneo con el parametro
 timeout: const Duration(seconds minutes).
 
 * __advertisementData__: método que expone las características obtenidas
-de los dispositivos escaneados en rango. Tiene los siguientes metodos:
+de los dispositivos escaneados en rango. Tiene los siguientes métodos:
 
       String local name
       int txPowerLevel
@@ -64,15 +64,16 @@ Entregar longitud, latitud, además de entregar la precisión del cálculo.
 Métodos usados a continuación
 
 * __new Location()__: Inicializa objeto para usar la librería.
-* __onLocationChanged().listen((Map<String,double> result)__: usando
-el objeto location, detecta los cambios de posición y los guarda en un mapa
-(result en este caso del tipo String-double).Se debe tener el método setState para actualizar cada
-vez que se recibe un cambio, además de que el resultado del método debe estar
-en un objeto de tipo StreamSubscription( similar a un observer) para que se
-pueda mantenere un seguimiento de la posición.
 * __hasPermission__:usando el objeto location chequea que la aplicación tenga permisos para
 usar el GPS. Entrega un booleano.
 * __getLocation__: pide una sola vez la información del GPS al objeto location.
+* __onLocationChanged().listen((Map<String,double> result)__: usando
+el objeto location, detecta los cambios de posición y los guarda en un mapa
+(result en este caso del tipo String-double).Se debe tener el método __setState__ para actualizar cada
+vez que se recibe un cambio, además de que el resultado del método debe estar
+en un objeto de tipo StreamSubscription( similar a un observer) para que se
+pueda mantenere un seguimiento de la posición.
+
 
 Como toda la información se guarda en un mapa, se especifica a continuación
 los nombres con los que se guardan la información:
@@ -101,7 +102,7 @@ dentro del tag dict
 ## QR
 [Página de la librería barcode_scan](https://pub.dartlang.org/packages/barcode_scan)
 
-Escanea imagen, entrega en pantalla la informacion obtenida del QR. Es un
+Escanea imagen, entrega en pantalla la información obtenida del QR. Es un
 wrapper de 2 librerias QR de android y de iOS.
 
 Métodos usados a continuación:
