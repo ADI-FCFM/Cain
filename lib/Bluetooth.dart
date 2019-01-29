@@ -1,11 +1,11 @@
 import 'dart:async';
+import 'dart:io';
+
 import 'package:beacons_manage/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_beacon/flutter_beacon.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'dart:io';
-import 'package:flutter/services.dart';
-
 
 ///widget para el bluetooth
 class FlutterBlueApp extends StatefulWidget {
@@ -19,17 +19,16 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
   /// Scanning
   StreamSubscription _scanSubscription;
   Map<DeviceIdentifier, ScanResult> scanResults = new Map();
+  /// verifica si se esta escaneando o no actualmente
   bool isScanning = false;
 
-  /// verifica si se esta escaneando o no actualmente
 
   /// State
   StreamSubscription _stateSubscription;
 
   /// Detecta cambios de estado del Bluetooth
-  BluetoothState state = BluetoothState.unknown;
-
   /// Establece el estado en que se encuentra el bluetooth del dispositivo, empieza con un estado desconocido
+  BluetoothState state = BluetoothState.unknown;
 
   /// Device
   BluetoothDevice device;
@@ -38,20 +37,20 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
   StreamSubscription deviceConnection;
   StreamSubscription deviceStateSubscription;
 
-  /// revisa el estado de el bluetooth.
+  /// revisa el estado del bluetooth.
   @override
   void initState() {
     super.initState();
     initBeacon();
 
-    /// Immediately get the state of FlutterBlue
+    /// Obtiene el estado actual del Bluetooth
     _flutterBlue.state.then((s) {
       setState(() {
         state = s;
       });
     });
 
-    /// Subscribe to state changes
+    /// Inicia la subscripcion para detectar los cambios de estado
     _stateSubscription = _flutterBlue.onStateChanged().listen((s) {
       setState(() {
         state = s;
@@ -82,11 +81,9 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
     )
         .listen((scanResult) {
       setState(() {
+        /// si encuentra alguno, lo agregara al mapa y lo listara
         if (scanResult.advertisementData.localName != "") {
           scanResults[scanResult.device.id] = scanResult;
-
-          /// si encuentra alguno, lo agregara al mapa y lo listara
-
         }
       });
     }, onDone: _stopScan);
@@ -125,10 +122,9 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
 
   _buildScanResultTiles() {
     return scanResults.values
-        .map((r) =>
-        ScanResultTile(
-          result: r,
-        ))
+        .map((r) => ScanResultTile(
+              result: r,
+            ))
         .toList();
   }
 
@@ -139,25 +135,17 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
       child: new ListTile(
         title: new Text(
           'Bluetooth adapter is ${state.toString().substring(15)}',
-          style: Theme
-              .of(context)
-              .primaryTextTheme
-              .subhead,
+          style: Theme.of(context).primaryTextTheme.subhead,
         ),
         trailing: new Icon(
           Icons.error,
-          color: Theme
-              .of(context)
-              .primaryTextTheme
-              .subhead
-              .color,
+          color: Theme.of(context).primaryTextTheme.subhead.color,
         ),
       ),
     );
   }
 
-
-  /// Barra superior para demostrar que que el escaneo esta en proceso
+  /// Barra superior para demostrar que el escaneo esta en proceso
   _buildProgressBarTile() {
     return new LinearProgressIndicator();
   }
@@ -178,24 +166,18 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
         ),
         floatingActionButton: _buildScanningButton(),
 
-
         ///Se sobrelapan la visualizacion de la vista de la informacion generada
         ///por las 2 librerias, habria que cambiar como se visualizan las vistas para arreglarlo
         body: new Stack(
           alignment: Alignment.bottomCenter,
           children: <Widget>[
+            (isScanning) ? _buildProgressBarTile() : new Container(),
 
-
-            (isScanning) ? _buildProgressBarTile() : new Container(
-
-            ),
-
-            ///añade barrita de progreso durante el escaneo
+            ///añade barra de progreso durante el escaneo
             new ListView(
               children: tiles,
             ),
-            (_extraBuild()),
-
+            (_extraBuild()),  ///datos de la libreria Flutter_beacons
           ],
         ),
       ),
@@ -203,22 +185,25 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
   }
 
 
-  ///la otra libreria :D
 
+  /// Funciones de la libreria Flutter_beacons
   StreamSubscription<RangingResult> _streamRanging;
   final _regionBeacons = <Region, List<Beacon>>{};
   final _beacons = <Beacon>[];
 
   initBeacon() async {
     try {
-      await flutterBeacon.initializeScanning; ///llama a objeto de la libreria para que maneje el escaneo
+      await flutterBeacon.initializeScanning;
+
+      ///llama a objeto de la libreria para que maneje el escaneo
       print('Beacon scanner initialized');
     } on PlatformException catch (e) {
       print(e);
     }
     final regions = <Region>[];
+
     /// diferencia como inicializa las plataformas
-    if (Platform.isIOS ) {
+    if (Platform.isIOS) {
       regions.add(
         Region(
             identifier: 'Cubeacon',
@@ -231,20 +216,25 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
       regions.add(Region(identifier: 'com.beacon'));
     }
 
-    _streamRanging = flutterBeacon.ranging(regions).listen((result) { ///busca beacons dentro de las regiones almacenadas, guarda los resultados del ranging
+    _streamRanging = flutterBeacon.ranging(regions).listen((result) {
+      ///busca beacons dentro de las regiones almacenadas, guarda los resultados del ranging
       ///dentro de la variable result
-      if (result != null && mounted) { /// mounted aparentemente implica si esta encendido bluetooh y si esta corriendo la app
+      if (result != null && mounted) {
+        /// mounted aparentemente implica si esta encendido bluetooh y si esta corriendo la app
         setState(() {
           _regionBeacons[result.region] = result.beacons;
           _beacons.clear();
           _regionBeacons.values.forEach((list) {
             _beacons.addAll(list);
           });
-          _beacons.sort(_compareParameters); ///ordena las beacons encontradas
+          _beacons.sort(_compareParameters);
+
+          ///ordena las beacons encontradas
         });
       }
     });
   }
+
   int _compareParameters(Beacon a, Beacon b) {
     int compare = a.proximityUUID.compareTo(b.proximityUUID);
 
@@ -259,11 +249,12 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
     return compare;
   }
 
-  _extraBuild(){
+  _extraBuild() {
     return new ListView(
       children: ListTile.divideTiles(
           context: context,
-          tiles: _beacons.map((beacon) {  ///Ordena los beacons en un mapa, y usa  beacon variable
+          tiles: _beacons.map((beacon) {
+            ///Ordena los beacons en un mapa, y usa  beacon variable
             /// para trabajar con cada una de las beacons
             return ListTile(
               title: Text(beacon.proximityUUID),
@@ -283,9 +274,9 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
                       flex: 2,
                       fit: FlexFit.tight),
                   Flexible(
-                    child: Text('txPower: ${beacon.txPower}\n MAC: ${beacon.macAddress}',
-                        style: TextStyle(fontSize: 13.0)
-                    ),
+                    child: Text(
+                        'txPower: ${beacon.txPower}\n MAC: ${beacon.macAddress}',
+                        style: TextStyle(fontSize: 13.0)),
                     flex: 3,
                     fit: FlexFit.tight,
                   )
@@ -295,6 +286,4 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
           })).toList(),
     );
   }
-
-
 }

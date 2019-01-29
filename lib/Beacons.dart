@@ -1,10 +1,9 @@
-import 'dart:io';
-import 'package:flutter/material.dart';
 import 'dart:async';
+import 'dart:io';
+
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_beacon/flutter_beacon.dart';
-
-
 
 class Beacons extends StatefulWidget {
   @override
@@ -13,8 +12,12 @@ class Beacons extends StatefulWidget {
 
 class _BeaconsState extends State<Beacons> {
   StreamSubscription<RangingResult> _streamRanging;
-  final _regionBeacons = <Region, List<Beacon>>{};  ///almacena las "regiones" en las que se encuentras los beacons
-  final _beacons = <Beacon>[]; ///para tener en una "lista cada" beacon que este en el rango
+  final _regionBeacons = <Region, List<Beacon>>{};
+
+  ///almacena las "regiones" en las que se encuentras los beacons
+  final _beacons = <Beacon>[];
+
+  ///para tener en una "lista cada" beacon que este en el rango
 
   /// metodo que se ejecuta al iniciar el objeto BeaconsState
   @override
@@ -25,15 +28,18 @@ class _BeaconsState extends State<Beacons> {
 
   initBeacon() async {
     try {
-      await flutterBeacon.initializeScanning; ///llama a objeto de la libreria para que maneje el escaneo
+      await flutterBeacon.initializeScanning;
+
+      ///llama a objeto de la libreria para que maneje el escaneo
       print('Beacon scanner initialized');
     } on PlatformException catch (e) {
       print(e);
     }
 
     final regions = <Region>[];
-/// diferencia como inicializa las plataformas
-    if (Platform.isIOS ) {
+
+    /// diferencia como inicializa las plataformas
+    if (Platform.isIOS) {
       regions.add(
         Region(
             identifier: 'Cubeacon',
@@ -46,16 +52,20 @@ class _BeaconsState extends State<Beacons> {
       regions.add(Region(identifier: 'com.beacon'));
     }
 
-    _streamRanging = flutterBeacon.ranging(regions).listen((result) { ///busca beacons dentro de las regiones almacenadas, guarda los resultados del ranging
+    _streamRanging = flutterBeacon.ranging(regions).listen((result) {
+      ///busca beacons dentro de las regiones almacenadas, guarda los resultados del ranging
       ///dentro de la variable result
-      if (result != null && mounted) { /// mounted aparentemente implica si esta encendido bluetooh y si esta corriendo la app
+      if (result != null && mounted) {
+        /// mounted aparentemente implica si esta encendido bluetooh y si esta corriendo la app
         setState(() {
           _regionBeacons[result.region] = result.beacons;
           _beacons.clear();
           _regionBeacons.values.forEach((list) {
             _beacons.addAll(list);
           });
-          _beacons.sort(_compareParameters); ///ordena las beacons encontradas
+          _beacons.sort(_compareParameters);
+
+          ///ordena las beacons encontradas
         });
       }
     });
@@ -76,7 +86,6 @@ class _BeaconsState extends State<Beacons> {
     return compare;
   }
 
-
   /// metodo para cancelar subscripciones y evitar que siga leyendo informacion
   @override
   void dispose() {
@@ -96,10 +105,11 @@ class _BeaconsState extends State<Beacons> {
         appBar: AppBar(
           title: const Text('Flutter Beacon'),
         ),
-        body:  ListView(
+        body: ListView(
           children: ListTile.divideTiles(
               context: context,
-              tiles: _beacons.map((beacon) {  ///Ordena los beacons en un mapa, y usa  beacon variable
+              tiles: _beacons.map((beacon) {
+                ///Ordena los beacons en un mapa, y usa  beacon variable
                 /// para trabajar con cada una de las beacons
                 return ListTile(
                   title: Text(beacon.proximityUUID),
@@ -119,9 +129,9 @@ class _BeaconsState extends State<Beacons> {
                           flex: 2,
                           fit: FlexFit.tight),
                       Flexible(
-                        child: Text('txPower: ${beacon.txPower}\n MAC: ${beacon.macAddress}',
-                            style: TextStyle(fontSize: 13.0)
-                        ),
+                        child: Text(
+                            'txPower: ${beacon.txPower}\n MAC: ${beacon.macAddress}',
+                            style: TextStyle(fontSize: 13.0)),
                         flex: 3,
                         fit: FlexFit.tight,
                       )

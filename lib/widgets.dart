@@ -33,7 +33,6 @@ class ScanResultTile extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-
           Text(title, style: Theme.of(context).textTheme.caption),
           SizedBox(
             width: 12.0,
@@ -97,7 +96,7 @@ class ScanResultTile extends StatelessWidget {
             context,
             'Manufacturer Data',
             getNiceManufacturerData(
-                result.advertisementData.manufacturerData) ??
+                    result.advertisementData.manufacturerData) ??
                 'N/A'),
         _buildAdvRow(
             context,
@@ -108,10 +107,7 @@ class ScanResultTile extends StatelessWidget {
         _buildAdvRow(context, 'Service Data',
             getNiceServiceData(result.advertisementData.serviceData) ?? 'N/A'),
         _buildAdvRow(context, 'RSSI', result.rssi.toString()),
-],
-      
+      ],
     );
   }
 }
-
-

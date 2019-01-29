@@ -1,14 +1,13 @@
-import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:barcode_scan/barcode_scan.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class qr extends StatefulWidget{
+class Qr extends StatefulWidget {
   @override
-  qrAppState createState() => new qrAppState();
+  QrAppState createState() => new QrAppState();
 }
 
-class qrAppState extends State<qr>{
+class QrAppState extends State<Qr> {
   /// String para guardar y mostrar la informacion del QR, empieza con
   /// un mensaje por defecto
   String result = "Apriete el icono para escanear !";
@@ -25,7 +24,7 @@ class qrAppState extends State<qr>{
     } on PlatformException catch (ex) {
       if (ex.code == BarcodeScanner.CameraAccessDenied) {
         setState(() {
-          result = "Permiso de Camara denegado ";
+          result = "Permiso de Cámara denegado ";
         });
       } else {
         setState(() {
@@ -34,52 +33,33 @@ class qrAppState extends State<qr>{
       }
     }
   }
-/// metodos para el url_launcher en caso de necesitarlo
-   _check(result){
-     var aux = result.substring(0,4);
-     if(aux=='http')
-       return true;
-     return false;
-   }
-  /// metodos para el url_launcher en caso de necesitarlo
-  _launch(result)async{
-    if(await canLaunch(result)){
-      await launch(result, forceSafariVC: true, forceWebView: true);
-    }
-    else{
-      throw 'no funca';
-    }
-  }
 
   /// constructor de la vista.
   @override
   Widget build(BuildContext context) {
-
     return new MaterialApp(
         theme: ThemeData(
           primarySwatch: Colors.deepPurple,
         ),
-      home:Scaffold(
+        home: Scaffold(
+          appBar: AppBar(
+            title: Text("QR Scanner"),
+          ),
+          body: Center(
+            child: Text(
+              result,
+              style: new TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
+            ),
+          ),
 
-      appBar: AppBar(
-        title: Text("QR Scanner"),
-      ),
-      body: Center(
-        child:
-        Text(
-          result,
-          style: new TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
-        ),
-      ),
-
-      ///icono y boton para iniciar el escaneo.
-      floatingActionButton: FloatingActionButton.extended(
-        icon: Icon(Icons.camera_alt),
-        label: Text("Empezar el escaneo"),
-        onPressed: _scanQR,
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-    )
-    );
+          ///icono y boton para iniciar el escaneo.
+          floatingActionButton: FloatingActionButton.extended(
+            icon: Icon(Icons.camera_alt),
+            label: Text("Empezar el escaneo"),
+            onPressed: _scanQR,
+          ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerFloat,
+        ));
   }
 }
