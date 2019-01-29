@@ -2,8 +2,8 @@
 Todas las implementaciones están basadas en los ejemplos de las librerías que están siendo utilizadas,
 se han realizado pequeños cambios con el objetivo de mostrar de forma más clara lo que se ha pedido.
 
-Asegurarse que en el archivo [build.gradle](../master/android/app/build.gradle) ,
-compileSdkVersion y targetSdkVersion sea  28 y que minSdkVersion sea 19. Esto puede variar
+Asegurarse que en el archivo [build.gradle](../master/android/app/build.gradle),
+compileSdkVersion y targetSdkVersion sea 28 y que minSdkVersion sea 19. Esto puede variar
 dependiendo la version del SDK de android y de a la velocidad que se actualizen las librerías
 
 
