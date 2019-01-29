@@ -4,7 +4,7 @@ se han realizado pequeños cambios con el objetivo de mostrar de forma más clar
 
 Asegurarse que en el archivo [build.gradle](../master/android/app/build.gradle),
 compileSdkVersion y targetSdkVersion sea 28 y que minSdkVersion sea 19. Esto puede variar
-dependiendo la version del SDK de android y de a la velocidad que se actualizen las librerías
+dependiendo la versión del SDK de android y de a la velocidad que se actualizen las librerías
 
 
 Se especificará cuando haya que inicializar objetos de la librería para usarla.
@@ -16,8 +16,8 @@ Busca los dispositivos bluetooth en las cercanías, y obtiene la información de
 dispositivos detectados (rrsi, uuid, mac entre otros elementos de interés).
 
 Métodos y objetos usados a continuación:
-* __ScanResult__: objeto que almacena la informacion resultante del escaneo
-realizado. Tiene los siguientes metodos
+* __ScanResult__: objeto que almacena la información resultante del escaneo
+realizado. Tiene los siguientes métodos
 
         advertisementData: informacion del dispositivo
         device: dispositivo obtenido
@@ -26,7 +26,7 @@ realizado. Tiene los siguientes metodos
 * __device__: identifica el dispositivo bluetooth que se
  está detectando. Usado para comprobar el estado del dispositivo inicializandolo
  previamente con BluetoothDevice.
-  Tiene los siguientes metodos:
+  Tiene los siguientes métodos:
 
         id: entrega el MAC del dispositivo.
         nombre: Nombre con el que se identifica el dispositivo.
@@ -36,7 +36,7 @@ realizado. Tiene los siguientes metodos
 
 * __advertisementData__: método que expone las características obtenidas
 de los dispositivos escaneados en rango. Tiene los siguientes métodos que
-entregan la informacion del dispositivo:
+entregan la información del dispositivo:
 
       String local name
       int txPowerLevel
@@ -58,7 +58,7 @@ unauthorized, turningOn, turningOff, on, off__ .
 (algo en este caso) para trabajar con ella.
 
 * __scan()__: empieza el escaneo de los dispositivos bluetooth de su cercanía.
-Se le puede colocar un tiempo máximo de duración del escaneo con el parametro
+Se le puede colocar un tiempo máximo de duración del escaneo con el parámetro
 timeout: const Duration(seconds minutes).
 
 
@@ -102,7 +102,7 @@ los nombres con los que se guardan la información:
 * Acurracy
 
 ### Observaciones
-se demora entre 5-10 segundos en actualizar la locacion segun testeos
+se demora entre 5-10 segundos en actualizar la locación según testeos
 ### Permisos 
 En el archivo [AndroidManifest.xml](../master/android/app/src/main/AndroidManifest.xml)
 agregar lo siguiente
@@ -126,8 +126,8 @@ wrapper de 2 librerias QR de android y de iOS.
 Métodos usados a continuación:
 
 * __BarcodeScanner.scan()__: función de la librería para iniciar el escaneo,
-devuelve un string con la informacion sacada del QR. Usada dentro de la
-funcion  _scanQR_
+devuelve un string con la información sacada del QR. Usada dentro de la
+función  _scanQR_
 
 ### Permisos
 En el archivo [AndroidManifest.xml](../master/android/app/src/main/AndroidManifest.xml)
@@ -166,7 +166,7 @@ Funciona con iOS8+
 Utiles de la librería usados a continuación:
 
 * __Beacon__ tipo de objeto que almacena las características de cada una de las
-beacons encontradas, métodos para obtener su informacion a continuación
+beacons encontradas, métodos para obtener su información a continuación
 
         proximityUUID
         major
