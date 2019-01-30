@@ -33,6 +33,7 @@ dependiendo la versión del SDK de android y de a la velocidad que se actualizen
 
 Se especificará cuando haya que inicializar objetos de la librería para usarla.
 
+El proceso de investigación fue realizado entre el 2 y el 24 de enero de 2019, por lo que pueden existir actualizaciones de las librerías al momento de consultar este repositorio.
 
 
 ## GPS
